@@ -4,21 +4,25 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.OperatorConstants;
 
 /** An example command that uses an example subsystem. */
-public class ExampleCommand extends Command {
+public class DriveCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ExampleSubsystem m_subsystem;
+  private final DriveSubsystem m_subsystem;
+  private final GenericHID m_controller;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ExampleCommand(ExampleSubsystem subsystem) {
+  public DriveCommand(DriveSubsystem subsystem, GenericHID controller) {
     m_subsystem = subsystem;
+    m_controller = controller;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -29,7 +33,13 @@ public class ExampleCommand extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    double vx = m_controller.getRawAxis(OperatorConstants.controllerXAxis);
+    double vy = m_controller.getRawAxis(OperatorConstants.controllerYAxis);
+    double omega = m_controller.getRawAxis(OperatorConstants.controllerZAxis);
+
+    m_subsystem.driveCartesian(vx, vy, omega);
+  }
 
   // Called once the command ends or is interrupted.
   @Override

@@ -15,5 +15,17 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int controllerXAxis = 1;        // TODO: decide on which controller to use, current mapping is for xbox 360
+    public static final int controllerYAxis = 0;
+    public static final int controllerZAxis = 4;
+
+
+  }
+  public static class MotorID {                // TODO: Replace these values with actual ones
+    public static final int FRONT_RIGHT = 1;
+    public static final int FRONT_LEFT  = 2;
+    public static final int BACK_RIGHT  = 3;
+    public static final int BACK_LEFT   = 4;
+
   }
 }
