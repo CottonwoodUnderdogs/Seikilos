@@ -4,25 +4,27 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.CollectorSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class DriveCommand extends Command {
+public class CollectorCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final DriveSubsystem m_subsystem;
-  private final GenericHID m_controller;
+  private final CollectorSubsystem m_subsystem;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DriveCommand(DriveSubsystem subsystem, GenericHID controller) {
+  public CollectorCommand(CollectorSubsystem subsystem) {
     m_subsystem = subsystem;
-    m_controller = controller;
+    
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -34,16 +36,15 @@ public class DriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double vx = m_controller.getRawAxis(OperatorConstants.SwitchMappings.controllerXAxis);
-    double vy = m_controller.getRawAxis(OperatorConstants.SwitchMappings.controllerYAxis);
-    double omega = m_controller.getRawAxis(OperatorConstants.SwitchMappings.controllerZAxis);
-
-    m_subsystem.driveCartesian(vx, vy, omega);
+    m_subsystem.collect(Constants.MotorSpeeds.COLLECTOR_SPEED);
   }
+  
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_subsystem.collect(0);
+  }
 
   // Returns true when the command should end.
   @Override

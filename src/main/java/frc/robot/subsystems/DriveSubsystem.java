@@ -10,8 +10,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
+import frc.robot.Constants.MotorSpeeds;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -21,6 +24,11 @@ public class DriveSubsystem extends SubsystemBase {
     mFrontLeft.restoreFactoryDefaults();
     mBackRight.restoreFactoryDefaults();
     mBackLeft.restoreFactoryDefaults();
+
+    mFrontRight.setIdleMode(IdleMode.kBrake);
+    mFrontLeft.setIdleMode(IdleMode.kBrake);
+    mBackRight.setIdleMode(IdleMode.kBrake);
+    mBackLeft.setIdleMode(IdleMode.kBrake);
 
     mFrontRight.setInverted(true);
     mBackRight.setInverted(true);
@@ -39,9 +47,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   // motor controller setup
   CANSparkMax mFrontRight = new CANSparkMax(Constants.MotorID.FRONT_RIGHT, MotorType.kBrushless);
-  CANSparkMax mFrontLeft  = new CANSparkMax(Constants.MotorID.FRONT_RIGHT, MotorType.kBrushless);
-  CANSparkMax mBackRight  = new CANSparkMax(Constants.MotorID.FRONT_RIGHT, MotorType.kBrushless);
-  CANSparkMax mBackLeft   = new CANSparkMax(Constants.MotorID.FRONT_RIGHT, MotorType.kBrushless);
+  CANSparkMax mFrontLeft  = new CANSparkMax(Constants.MotorID.FRONT_LEFT, MotorType.kBrushless);
+  CANSparkMax mBackRight  = new CANSparkMax(Constants.MotorID.BACK_RIGHT, MotorType.kBrushless);
+  CANSparkMax mBackLeft   = new CANSparkMax(Constants.MotorID.BACK_LEFT, MotorType.kBrushless);
 
   private final MecanumDrive robotDrive = new MecanumDrive(mFrontLeft, mBackLeft, mFrontRight, mBackRight);
 
@@ -72,7 +80,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void driveCartesian(double vx, double vy, double omega) {
     // TODO: try squaring inputs, possible solution instead of implementing slow mode
-    robotDrive.driveCartesian(vx * 0.8, vy * 0.8, omega * 0.8);
+    robotDrive.driveCartesian(vx * MotorSpeeds.DRIVE_SPEED, vy * MotorSpeeds.DRIVE_SPEED, omega * MotorSpeeds.DRIVE_SPEED);
   }
 
   @Override

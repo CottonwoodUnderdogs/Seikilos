@@ -4,15 +4,18 @@
 
 package frc.robot.commands;
 
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.Constants.MotorSpeeds;
 import frc.robot.Constants.OperatorConstants;
 
 /** An example command that uses an example subsystem. */
-public class DriveCommand extends Command {
+public class ClimberCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final DriveSubsystem m_subsystem;
+  private final ClimberSubsystem m_subsystem;
   private final GenericHID m_controller;
 
   /**
@@ -20,7 +23,7 @@ public class DriveCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DriveCommand(DriveSubsystem subsystem, GenericHID controller) {
+  public ClimberCommand(ClimberSubsystem subsystem, GenericHID controller) {
     m_subsystem = subsystem;
     m_controller = controller;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -34,11 +37,11 @@ public class DriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double vx = m_controller.getRawAxis(OperatorConstants.SwitchMappings.controllerXAxis);
-    double vy = m_controller.getRawAxis(OperatorConstants.SwitchMappings.controllerYAxis);
-    double omega = m_controller.getRawAxis(OperatorConstants.SwitchMappings.controllerZAxis);
-
-    m_subsystem.driveCartesian(vx, vy, omega);
+    
+    double speedLeft  = m_controller.getRawAxis(OperatorConstants.XboxMappings.controllerLYAxis) * MotorSpeeds.CLIMBER_LEFT_SPEED;
+    double speedRight = m_controller.getRawAxis(OperatorConstants.XboxMappings.controllerRYAxis) * MotorSpeeds.CLIMBER_RIGHT_SPEED;
+    m_subsystem.climbLeft(speedLeft);
+    m_subsystem.climbRight(speedRight);
   }
 
   // Called once the command ends or is interrupted.

@@ -5,11 +5,29 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AnglerCommand;
+import frc.robot.commands.AnglerOffCommand;
 import frc.robot.commands.Auto;
+import frc.robot.commands.ClimberCommand;
+import frc.robot.commands.CollectorCommand;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.FeederCommand;
+import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.AnglerSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.CollectorSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+
+import org.opencv.osgi.OpenCVInterface;
+
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -20,13 +38,26 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // Controllers
-  private final GenericHID m_driverController = new GenericHID(OperatorConstants.kDriverControllerPort);
-  
+  private final GenericHID m_driverController = new GenericHID(OperatorConstants.SwitchMappings.kDriverControllerPort);
+
   // Subsystems
   private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem();
+  private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+  private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
+  private final AnglerSubsystem m_AnglerSubsystem = new AnglerSubsystem();
+  private final CollectorSubsystem m_CollectorSubsystem = new CollectorSubsystem();
 
   // Commands
   private final DriveCommand m_DriveCommand = new DriveCommand(m_DriveSubsystem, m_driverController);
+
+  private final ShooterCommand m_ShooterCommand = new ShooterCommand(m_ShooterSubsystem);
+  private final FeederCommand m_FeederCommand = new FeederCommand(m_ShooterSubsystem);
+
+  private final ClimberCommand m_ClimberCommand = new ClimberCommand(m_ClimberSubsystem, m_driverController);
+
+  private final AnglerCommand m_AnglerCommand = new AnglerCommand(m_AnglerSubsystem);
+
+  private final CollectorCommand m_CollectorCommand = new CollectorCommand(m_CollectorSubsystem);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -34,6 +65,8 @@ public class RobotContainer {
     configureBindings();
 
     m_DriveSubsystem.setDefaultCommand(m_DriveCommand);
+    m_ClimberSubsystem.setDefaultCommand(m_ClimberCommand);
+    // m_AnglerSubsystem.setDefaultCommand(m_AnglerCommand);
   }
 
   /**
@@ -46,13 +79,31 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    // new Trigger(m_exampleSubsystem::exampleCondition)
-    //     .onTrue(new ExampleCommand(m_exampleSubsystem));
+    // testing motors
+    final JoystickButton shooterButton = new JoystickButton(m_driverController, OperatorConstants.SwitchMappings.A);
+    final JoystickButton feederButton = new JoystickButton(m_driverController, OperatorConstants.SwitchMappings.Y);
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    final JoystickButton angleButton = new JoystickButton(m_driverController, OperatorConstants.SwitchMappings.B);
+
+    final JoystickButton collectIntakeButton = new JoystickButton(m_driverController, OperatorConstants.SwitchMappings.X);
+    
+    shooterButton.whileTrue(m_ShooterCommand);
+    collectIntakeButton.whileTrue(m_CollectorCommand);
+    feederButton.whileTrue(m_FeederCommand);
+    angleButton.onTrue(m_AnglerCommand).onFalse(new AnglerOffCommand(m_AnglerSubsystem));
+    
+
+    // angleButton.whileTrue(m_AnglerCommand);
+    // angleButton.onTrue(
+    //   new SequentialCommandGroup(
+    //     Commands.print("angling"),
+    //     m_AnglerCommand,
+    //     Commands.print("waiting"),
+    //     new WaitCommand(3),
+    //     Commands.print("end angling"),
+    //     new AnglerOffCommand(m_AnglerSubsystem)
+    //   )
+    // );
   }
 
   /**
