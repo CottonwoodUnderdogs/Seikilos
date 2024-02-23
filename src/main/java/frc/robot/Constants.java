@@ -34,7 +34,7 @@ public final class Constants {
       public static final int START  = 10;
     }
     public static class XboxMappings {
-      public static final int kSecondaryControllerPort = 0;
+      public static final int kSecondaryControllerPort = 1;
       public static final int controllerLYAxis = 1; 
       public static final int controllerRYAxis = 5;
     }
@@ -51,16 +51,16 @@ public final class Constants {
 
     public static final int ANGLER = 7;
     
-    public static final int CLIMBER_LEFT  = 8; // Climbing Motors
-    public static final int CLIMBER_RIGHT = 9;
+    public static final int CLIMBER_LEFT  = 10; // Climbing Motors
+    public static final int CLIMBER_RIGHT = 8;
 
-    public static final int COLLECTOR = 10;
+    public static final int COLLECTOR = 9;
   }
   
   public static class MotorSpeeds {
-    public static final double FEEDER_SPEED = 0.5;
-    public static final double SHOOTER_SPEED = 0.3;
-    public static final double COLLECTOR_SPEED = 0.6;
+    public static final double FEEDER_SPEED = 0.9;
+    public static final double SHOOTER_SPEED = 0.9;
+    public static final double COLLECTOR_SPEED = 0.8;
     public static final double DRIVE_SPEED = 0.3;
     public static final double CLIMBER_LEFT_SPEED = 0.3;
     public static final double CLIMBER_RIGHT_SPEED = 0.3;

@@ -34,7 +34,7 @@ public class DriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double vx = m_controller.getRawAxis(OperatorConstants.SwitchMappings.controllerXAxis);
+    double vx = -m_controller.getRawAxis(OperatorConstants.SwitchMappings.controllerXAxis);
     double vy = m_controller.getRawAxis(OperatorConstants.SwitchMappings.controllerYAxis);
     double omega = m_controller.getRawAxis(OperatorConstants.SwitchMappings.controllerZAxis);
 

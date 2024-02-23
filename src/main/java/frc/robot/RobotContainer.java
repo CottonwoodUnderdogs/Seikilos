@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -39,6 +40,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // Controllers
   private final GenericHID m_driverController = new GenericHID(OperatorConstants.SwitchMappings.kDriverControllerPort);
+  private final GenericHID m_secondaryController = new GenericHID(OperatorConstants.XboxMappings.kSecondaryControllerPort);
 
   // Subsystems
   private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem();
@@ -53,7 +55,7 @@ public class RobotContainer {
   private final ShooterCommand m_ShooterCommand = new ShooterCommand(m_ShooterSubsystem);
   private final FeederCommand m_FeederCommand = new FeederCommand(m_ShooterSubsystem);
 
-  private final ClimberCommand m_ClimberCommand = new ClimberCommand(m_ClimberSubsystem, m_driverController);
+  private final ClimberCommand m_ClimberCommand = new ClimberCommand(m_ClimberSubsystem, m_secondaryController);
 
   private final AnglerCommand m_AnglerCommand = new AnglerCommand(m_AnglerSubsystem);
 
@@ -95,13 +97,11 @@ public class RobotContainer {
 
     // angleButton.whileTrue(m_AnglerCommand);
     // angleButton.onTrue(
-    //   new SequentialCommandGroup(
-    //     Commands.print("angling"),
-    //     m_AnglerCommand,
-    //     Commands.print("waiting"),
-    //     new WaitCommand(3),
-    //     Commands.print("end angling"),
-    //     new AnglerOffCommand(m_AnglerSubsystem)
+    //   new ParallelCommandGroup(
+    //     new AnglerCommand(m_AnglerSubsystem),
+    //     new WaitCommand(3)
+    //       .andThen(new AnglerOffCommand(m_AnglerSubsystem))
+        
     //   )
     // );
   }

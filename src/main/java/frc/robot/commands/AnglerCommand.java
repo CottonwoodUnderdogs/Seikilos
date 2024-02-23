@@ -44,7 +44,7 @@ public class AnglerCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.anglePower(0.1);
+    m_subsystem.anglePower(-0.2);
   }
 
   // Returns true when the command should end.
