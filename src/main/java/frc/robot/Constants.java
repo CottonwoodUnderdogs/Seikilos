@@ -14,29 +14,40 @@ package frc.robot;
  */
 public final class Constants {
   public static class OperatorConstants {
-    public static class SwitchMappings {
-      public static final int kDriverControllerPort = 0;
-      public static final int controllerXAxis   = 1;        // Mappings for Switch Controller
-      public static final int controllerYAxis   = 0;        // Axes labeled by mecanum direction, not actual axis.
-      public static final int controllerZAxis   = 2;
-      public static final int controllerZRotate = 3;
+    // public static class SwitchMappings {
+    //   public static final int kDriverControllerPort = 0;
+    //   public static final int controllerXAxis   = 1;        // Mappings for Switch Controller
+    //   public static final int controllerYAxis   = 0;        // Axes labeled by mecanum direction, not actual axis.
+    //   public static final int controllerZAxis   = 2;
+    //   public static final int controllerZRotate = 3;
 
-      public static final int Y  = 1;
-      public static final int B  = 2;
-      public static final int A  = 3;
-      public static final int X  = 4;
-      public static final int L  = 5;
-      public static final int R  = 6;
-      public static final int ZL = 7;
-      public static final int ZR = 8;
+    //   public static final int Y  = 1;
+    //   public static final int B  = 2;
+    //   public static final int A  = 3;
+    //   public static final int X  = 4;
+    //   public static final int L  = 5;
+    //   public static final int R  = 6;
+    //   public static final int ZL = 7;
+    //   public static final int ZR = 8;
 
-      public static final int SELECT = 9;
-      public static final int START  = 10;
-    }
+    //   public static final int SELECT = 9;
+    //   public static final int START  = 10;
+    // }
     public static class XboxMappings {
-      public static final int kSecondaryControllerPort = 1;
-      public static final int controllerLYAxis = 1; 
-      public static final int controllerRYAxis = 5;
+      public static final int PRIMARY_CONTROLLER_PORT = 0;
+      public static final int SECONDARY_CONTROLLER_PORT = 1;
+      public static final int LXAxis = 0;
+      public static final int LYAxis = 1;
+      public static final int RXAxis = 4; 
+      public static final int RYAxis = 5;
+
+      public static final int A = 1;
+      public static final int B = 2;
+      public static final int X = 3;
+      public static final int Y = 4;
+      public static final int L = 5;
+      public static final int R = 6;
+
     }
     
   }
@@ -58,11 +69,11 @@ public final class Constants {
   }
   
   public static class MotorSpeeds {
-    public static final double FEEDER_SPEED = 0.9;
+    public static final double FEEDER_SPEED = 0.7;
     public static final double SHOOTER_SPEED = 0.2;
     public static final double COLLECTOR_SPEED = 0.8;
     public static final double DRIVE_SPEED = 0.3;
-    public static final double CLIMBER_LEFT_SPEED = 0.3;
-    public static final double CLIMBER_RIGHT_SPEED = 0.3;
+    public static final double CLIMBER_LEFT_SPEED = 0.8;
+    public static final double CLIMBER_RIGHT_SPEED = 0.8;
   }
 }

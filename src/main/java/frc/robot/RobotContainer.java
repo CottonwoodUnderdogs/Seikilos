@@ -17,6 +17,7 @@ import frc.robot.subsystems.AnglerSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CollectorSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 import org.opencv.osgi.OpenCVInterface;
@@ -40,12 +41,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // Controllers
-  private final GenericHID m_driverController = new GenericHID(OperatorConstants.SwitchMappings.kDriverControllerPort);
-  private final GenericHID m_secondaryController = new GenericHID(OperatorConstants.XboxMappings.kSecondaryControllerPort);
+  private final GenericHID m_driverController = new GenericHID(OperatorConstants.XboxMappings.PRIMARY_CONTROLLER_PORT);
+  private final GenericHID m_secondaryController = new GenericHID(OperatorConstants.XboxMappings.SECONDARY_CONTROLLER_PORT);
 
   // Subsystems
   private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+  private final FeederSubsystem m_FeederSubsystem = new FeederSubsystem();
   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
   private final AnglerSubsystem m_AnglerSubsystem = new AnglerSubsystem();
   private final CollectorSubsystem m_CollectorSubsystem = new CollectorSubsystem();
@@ -53,8 +55,8 @@ public class RobotContainer {
   // Commands
   private final DriveCommand m_DriveCommand = new DriveCommand(m_DriveSubsystem, m_driverController);
 
-  private final ShooterCommand m_ShooterCommand = new ShooterCommand(m_ShooterSubsystem, false);
-  private final FeederCommand m_FeederCommand = new FeederCommand(m_ShooterSubsystem);
+  private final ShooterCommand m_ShooterCommand = new ShooterCommand(m_ShooterSubsystem);
+  private final FeederCommand m_FeederCommand = new FeederCommand(m_FeederSubsystem);
 
   private final ClimberCommand m_ClimberCommand = new ClimberCommand(m_ClimberSubsystem, m_secondaryController);
 
@@ -83,24 +85,26 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // testing motors
-    final JoystickButton shooterButton = new JoystickButton(m_driverController, OperatorConstants.SwitchMappings.A);
-    final JoystickButton feederButton = new JoystickButton(m_driverController, OperatorConstants.SwitchMappings.Y);
+    final JoystickButton shooterButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.A);
+    final JoystickButton feederButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.Y);
 
-    final JoystickButton angleButton = new JoystickButton(m_driverController, OperatorConstants.SwitchMappings.B);
+    final JoystickButton angleButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.B);
 
-    final JoystickButton collectIntakeButton = new JoystickButton(m_driverController, OperatorConstants.SwitchMappings.X);
+    final JoystickButton collectIntakeButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.X);
     
     // shooterButton.onTrue();
     collectIntakeButton.whileTrue(m_CollectorCommand);
     feederButton.whileTrue(m_FeederCommand);
     angleButton.onTrue(m_AnglerCommand).onFalse(new AnglerOffCommand(m_AnglerSubsystem));
+
+    // Start spinning up shooter, wait 3 seconds to get some speed, feed it in.
     shooterButton.onTrue(
-      new SequentialCommandGroup(
-        new StartEndCommand(
-          () -> m_ShooterSubsystem.shoot(0.3),
-          () -> m_ShooterSubsystem.shoot(0)
-        ).withTimeout(3),
-        new FeederCommand(m_ShooterSubsystem).withTimeout(3)
+      new ParallelCommandGroup(
+        new ShooterCommand(m_ShooterSubsystem).withTimeout(5), // the time outs in this sequence are just for turning off the motors after a bit.
+        new SequentialCommandGroup(
+          new WaitCommand(3),
+          new FeederCommand(m_FeederSubsystem).withTimeout(3)
+        )
       )
     );
     // angleButton.whileTrue(m_AnglerCommand);

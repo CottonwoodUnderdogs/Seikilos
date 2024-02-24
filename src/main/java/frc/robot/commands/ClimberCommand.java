@@ -38,8 +38,9 @@ public class ClimberCommand extends Command {
   @Override
   public void execute() {
     
-    double speedLeft  = m_controller.getRawAxis(OperatorConstants.XboxMappings.controllerLYAxis) * MotorSpeeds.CLIMBER_LEFT_SPEED;
-    double speedRight = m_controller.getRawAxis(OperatorConstants.XboxMappings.controllerRYAxis) * MotorSpeeds.CLIMBER_RIGHT_SPEED;
+    double speedLeft  = m_controller.getRawAxis(OperatorConstants.XboxMappings.LYAxis) * MotorSpeeds.CLIMBER_LEFT_SPEED;
+    // negative speedRight so that down on the analog stick is down on the arms.
+    double speedRight = -m_controller.getRawAxis(OperatorConstants.XboxMappings.RYAxis) * MotorSpeeds.CLIMBER_RIGHT_SPEED;
     m_subsystem.climbLeft(speedLeft);
     m_subsystem.climbRight(speedRight);
   }

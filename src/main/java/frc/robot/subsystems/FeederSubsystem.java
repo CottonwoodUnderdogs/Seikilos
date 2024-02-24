@@ -14,18 +14,18 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;;
 
-public class ShooterSubsystem extends SubsystemBase {
-  /** Creates a new ShooterSubsystem. */
-  public ShooterSubsystem() {
-    mShooter.restoreFactoryDefaults();
-    mShooter.setIdleMode(IdleMode.kCoast);
+public class FeederSubsystem extends SubsystemBase {
+  /** Creates a new FeederSubsystem. */
+  public FeederSubsystem() {
+    mFeeder.restoreFactoryDefaults();
+    mFeeder.setIdleMode(IdleMode.kCoast);
 
-    mShooter.setSmartCurrentLimit(38);
-    mShooter.setSecondaryCurrentLimit(40);
+    mFeeder.setSmartCurrentLimit(38);
+    mFeeder.setSecondaryCurrentLimit(40);
   }
 
-  CANSparkMax mShooter = new CANSparkMax(MotorID.SHOOTER, MotorType.kBrushless);
-  
+  CANSparkMax mFeeder = new CANSparkMax(MotorID.FEEDER, MotorType.kBrushless);
+
   /**
    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
    *
@@ -35,11 +35,9 @@ public class ShooterSubsystem extends SubsystemBase {
 //     // Query some boolean state, such as a digital sensor.
 //     return false;
 //   }
-
-  public void shoot(double speed) {
-    mShooter.set(speed);
+  public void feed(double speed) {
+    mFeeder.set(speed);
   }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

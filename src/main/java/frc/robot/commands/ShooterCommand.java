@@ -22,16 +22,14 @@ import frc.robot.Constants.OperatorConstants;
 public class ShooterCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ShooterSubsystem m_subsystem;
-  private final boolean m_interrupt;
-
+  
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ShooterCommand(ShooterSubsystem subsystem, boolean interrupt) {
+  public ShooterCommand(ShooterSubsystem subsystem) {
     m_subsystem = subsystem;
-    m_interrupt = interrupt;
     
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -41,7 +39,6 @@ public class ShooterCommand extends Command {
   @Override
   public void initialize() {
     m_subsystem.shoot(MotorSpeeds.SHOOTER_SPEED);
-    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -58,6 +55,6 @@ public class ShooterCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_interrupt;
+    return false;
   }
 }
