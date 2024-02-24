@@ -5,6 +5,11 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ShooterSubsystem;
+
+import javax.sound.midi.Sequencer;
+
+import org.ejml.equation.Sequence;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -17,14 +22,16 @@ import frc.robot.Constants.OperatorConstants;
 public class ShooterCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ShooterSubsystem m_subsystem;
+  private final boolean m_interrupt;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ShooterCommand(ShooterSubsystem subsystem) {
+  public ShooterCommand(ShooterSubsystem subsystem, boolean interrupt) {
     m_subsystem = subsystem;
+    m_interrupt = interrupt;
     
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -32,12 +39,14 @@ public class ShooterCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_subsystem.shoot(MotorSpeeds.SHOOTER_SPEED);
+    
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.shoot(MotorSpeeds.SHOOTER_SPEED);
   }
 
   // Called once the command ends or is interrupted.
@@ -49,6 +58,6 @@ public class ShooterCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_interrupt;
   }
 }

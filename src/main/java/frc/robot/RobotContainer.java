@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -52,7 +53,7 @@ public class RobotContainer {
   // Commands
   private final DriveCommand m_DriveCommand = new DriveCommand(m_DriveSubsystem, m_driverController);
 
-  private final ShooterCommand m_ShooterCommand = new ShooterCommand(m_ShooterSubsystem);
+  private final ShooterCommand m_ShooterCommand = new ShooterCommand(m_ShooterSubsystem, false);
   private final FeederCommand m_FeederCommand = new FeederCommand(m_ShooterSubsystem);
 
   private final ClimberCommand m_ClimberCommand = new ClimberCommand(m_ClimberSubsystem, m_secondaryController);
@@ -89,12 +90,19 @@ public class RobotContainer {
 
     final JoystickButton collectIntakeButton = new JoystickButton(m_driverController, OperatorConstants.SwitchMappings.X);
     
-    shooterButton.whileTrue(m_ShooterCommand);
+    // shooterButton.onTrue();
     collectIntakeButton.whileTrue(m_CollectorCommand);
     feederButton.whileTrue(m_FeederCommand);
     angleButton.onTrue(m_AnglerCommand).onFalse(new AnglerOffCommand(m_AnglerSubsystem));
-    
-
+    shooterButton.onTrue(
+      new SequentialCommandGroup(
+        new StartEndCommand(
+          () -> m_ShooterSubsystem.shoot(0.3),
+          () -> m_ShooterSubsystem.shoot(0)
+        ).withTimeout(3),
+        new FeederCommand(m_ShooterSubsystem).withTimeout(3)
+      )
+    );
     // angleButton.whileTrue(m_AnglerCommand);
     // angleButton.onTrue(
     //   new ParallelCommandGroup(

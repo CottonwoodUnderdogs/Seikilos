@@ -59,7 +59,7 @@ public final class Constants {
   
   public static class MotorSpeeds {
     public static final double FEEDER_SPEED = 0.9;
-    public static final double SHOOTER_SPEED = 0.9;
+    public static final double SHOOTER_SPEED = 0.2;
     public static final double COLLECTOR_SPEED = 0.8;
     public static final double DRIVE_SPEED = 0.3;
     public static final double CLIMBER_LEFT_SPEED = 0.3;
