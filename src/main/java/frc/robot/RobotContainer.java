@@ -6,13 +6,13 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AnglerCommand;
-import frc.robot.commands.AnglerOffCommand;
 import frc.robot.commands.Auto;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.CollectorCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.FeederCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.ZeroAnglerCommand;
 import frc.robot.subsystems.AnglerSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CollectorSubsystem;
@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -49,14 +50,14 @@ public class RobotContainer {
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   private final FeederSubsystem m_FeederSubsystem = new FeederSubsystem();
   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
-  private final AnglerSubsystem m_AnglerSubsystem = new AnglerSubsystem();
+  public static AnglerSubsystem m_AnglerSubsystem = new AnglerSubsystem();
   private final CollectorSubsystem m_CollectorSubsystem = new CollectorSubsystem();
 
   // Commands
   private final DriveCommand m_DriveCommand = new DriveCommand(m_DriveSubsystem, m_driverController);
 
   private final ShooterCommand m_ShooterCommand = new ShooterCommand(m_ShooterSubsystem);
-  private final FeederCommand m_FeederCommand = new FeederCommand(m_FeederSubsystem);
+  private final FeederCommand m_FeederCommand = new FeederCommand(m_FeederSubsystem, false);
 
   private final ClimberCommand m_ClimberCommand = new ClimberCommand(m_ClimberSubsystem, m_secondaryController);
 
@@ -71,9 +72,9 @@ public class RobotContainer {
 
     m_DriveSubsystem.setDefaultCommand(m_DriveCommand);
     m_ClimberSubsystem.setDefaultCommand(m_ClimberCommand);
-    // m_AnglerSubsystem.setDefaultCommand(m_AnglerCommand);
-  }
 
+  }
+  
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -84,7 +85,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // testing motors
+    // Controller Buttons
     final JoystickButton shooterButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.A);
     final JoystickButton feederButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.Y);
 
@@ -92,30 +93,31 @@ public class RobotContainer {
 
     final JoystickButton collectIntakeButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.X);
     
-    // shooterButton.onTrue();
-    collectIntakeButton.whileTrue(m_CollectorCommand);
-    feederButton.whileTrue(m_FeederCommand);
-    angleButton.onTrue(m_AnglerCommand).onFalse(new AnglerOffCommand(m_AnglerSubsystem));
 
+    collectIntakeButton.whileTrue(
+      new ZeroAnglerCommand(m_AnglerSubsystem).alongWith(
+      m_CollectorCommand.alongWith(
+        m_FeederCommand)
+      )
+    );
+    
+    angleButton.whileTrue(
+      m_AnglerCommand
+    );
+    
     // Start spinning up shooter, wait 3 seconds to get some speed, feed it in.
     shooterButton.onTrue(
+      // figuring out how to run multiple motors at the same time
+      // took 3 days, we are 5 days from deadline ;-;
       new ParallelCommandGroup(
         new ShooterCommand(m_ShooterSubsystem).withTimeout(5), // the time outs in this sequence are just for turning off the motors after a bit.
         new SequentialCommandGroup(
-          new WaitCommand(3),
-          new FeederCommand(m_FeederSubsystem).withTimeout(3)
+          new WaitCommand(3.3),
+          new FeederCommand(m_FeederSubsystem, true).withTimeout(1)
         )
       )
     );
-    // angleButton.whileTrue(m_AnglerCommand);
-    // angleButton.onTrue(
-    //   new ParallelCommandGroup(
-    //     new AnglerCommand(m_AnglerSubsystem),
-    //     new WaitCommand(3)
-    //       .andThen(new AnglerOffCommand(m_AnglerSubsystem))
-        
-    //   )
-    // );
+  
   }
 
   /**

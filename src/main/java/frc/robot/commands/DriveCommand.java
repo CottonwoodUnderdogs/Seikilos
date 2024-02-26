@@ -35,8 +35,8 @@ public class DriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double vx = -m_controller.getRawAxis(XboxMappings.LXAxis);
-    double vy = m_controller.getRawAxis(XboxMappings.LYAxis);
+    double vx = -m_controller.getRawAxis(XboxMappings.LYAxis);
+    double vy = m_controller.getRawAxis(XboxMappings.LXAxis);
     double omega = m_controller.getRawAxis(XboxMappings.RXAxis);
 
     m_subsystem.driveCartesian(vx, vy, omega);

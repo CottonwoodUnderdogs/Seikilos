@@ -36,7 +36,7 @@ public final class Constants {
     public static class XboxMappings {
       public static final int PRIMARY_CONTROLLER_PORT = 0;
       public static final int SECONDARY_CONTROLLER_PORT = 1;
-      public static final int LXAxis = 0;
+      public static final int LXAxis = 0; // wow xbox controller axes are way better named than the switch ones.
       public static final int LYAxis = 1;
       public static final int RXAxis = 4; 
       public static final int RYAxis = 5;
@@ -69,11 +69,19 @@ public final class Constants {
   }
   
   public static class MotorSpeeds {
-    public static final double FEEDER_SPEED = 0.7;
-    public static final double SHOOTER_SPEED = 0.2;
-    public static final double COLLECTOR_SPEED = 0.8;
+    public static final double FEEDER_SPEED = 1.0;
+    public static final double SHOOTER_SPEED = 1.0;
+    public static final double COLLECTOR_SPEED = 0.2;
     public static final double DRIVE_SPEED = 0.3;
-    public static final double CLIMBER_LEFT_SPEED = 0.8;
-    public static final double CLIMBER_RIGHT_SPEED = 0.8;
+    public static final double CLIMBER_LEFT_SPEED = 0.5;
+    public static final double CLIMBER_RIGHT_SPEED = 0.5;
+  }
+
+  public static class Inputs {
+    // Beam break sensors
+    public static final int NOTE_LOADED_CHANNEL = 0;
+    // Limit Switches
+    public static final int LEFT_CLIMBER_CHANNEL = 2;
+    public static final int RIGHT_CLIMBER_CHANNEL = 3;
   }
 }

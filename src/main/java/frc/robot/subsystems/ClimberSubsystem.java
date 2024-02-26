@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.hal.CANAPITypes.CANDeviceType;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,6 +35,8 @@ public class ClimberSubsystem extends SubsystemBase {
   CANSparkMax mClimberLeft = new CANSparkMax(Constants.MotorID.CLIMBER_LEFT, MotorType.kBrushless);
   CANSparkMax mClimberRight  = new CANSparkMax(Constants.MotorID.CLIMBER_RIGHT, MotorType.kBrushless);
 
+  DigitalInput climberLeftLimit = new DigitalInput(Constants.Inputs.LEFT_CLIMBER_CHANNEL);
+  DigitalInput climberRightLimit = new DigitalInput(Constants.Inputs.RIGHT_CLIMBER_CHANNEL);
   /**
    * Example command factory method.
    *
@@ -59,10 +62,29 @@ public class ClimberSubsystem extends SubsystemBase {
 //   }
 
   public void climbLeft(double speed) {
-    mClimberLeft.set(speed);
+    if (climberLeftLimit.get()) {
+      mClimberLeft.set(speed);
+    } else {
+      if (speed >= 0) {
+        mClimberLeft.set(0);
+      } else {
+        mClimberLeft.set(speed);
+      }
+      
+    }
+    
   }
   public void climbRight(double speed) {
-    mClimberRight.set(speed);
+    if (climberRightLimit.get()) {
+      mClimberRight.set(speed);
+    } else {
+      if (speed <= 0) {
+        mClimberRight.set(0);
+      } else {
+        mClimberRight.set(speed);
+      }
+    }
+    
   }
   @Override
   public void periodic() {
