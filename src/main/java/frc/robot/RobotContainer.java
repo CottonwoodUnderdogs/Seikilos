@@ -86,19 +86,15 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Controller Buttons
-    final JoystickButton shooterButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.A);
-    final JoystickButton feederButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.Y);
-
+    final JoystickButton shooterButton = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.A);
     final JoystickButton angleButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.B);
-
     final JoystickButton collectIntakeButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.X);
     
 
     collectIntakeButton.whileTrue(
       new ZeroAnglerCommand(m_AnglerSubsystem).alongWith(
-      m_CollectorCommand.alongWith(
-        m_FeederCommand)
-      )
+      new CollectorCommand(m_CollectorSubsystem)
+      ).alongWith(m_FeederCommand)
     );
     
     angleButton.whileTrue(
@@ -110,9 +106,9 @@ public class RobotContainer {
       // figuring out how to run multiple motors at the same time
       // took 3 days, we are 5 days from deadline ;-;
       new ParallelCommandGroup(
-        new ShooterCommand(m_ShooterSubsystem).withTimeout(5), // the time outs in this sequence are just for turning off the motors after a bit.
+        new ShooterCommand(m_ShooterSubsystem).withTimeout(2), // the time outs in this sequence are just for turning off the motors after a bit.
         new SequentialCommandGroup(
-          new WaitCommand(3.3),
+          new WaitCommand(0.9),
           new FeederCommand(m_FeederSubsystem, true).withTimeout(1)
         )
       )

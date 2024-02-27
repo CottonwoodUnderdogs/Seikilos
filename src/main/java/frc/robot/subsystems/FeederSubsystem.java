@@ -22,8 +22,8 @@ public class FeederSubsystem extends SubsystemBase {
     mFeeder.restoreFactoryDefaults();
     mFeeder.setIdleMode(IdleMode.kBrake);
 
-    mFeeder.setSmartCurrentLimit(38);
-    mFeeder.setSecondaryCurrentLimit(40);
+    mFeeder.setSmartCurrentLimit(40);
+    mFeeder.setSecondaryCurrentLimit(50);
   }
 
   CANSparkMax mFeeder = new CANSparkMax(MotorID.FEEDER, MotorType.kBrushless);

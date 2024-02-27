@@ -20,8 +20,8 @@ public class ShooterSubsystem extends SubsystemBase {
     mShooter.restoreFactoryDefaults();
     mShooter.setIdleMode(IdleMode.kCoast);
 
-    mShooter.setSmartCurrentLimit(38);
-    mShooter.setSecondaryCurrentLimit(40);
+    mShooter.setSmartCurrentLimit(40);
+    mShooter.setSecondaryCurrentLimit(50);
   }
 
   CANSparkMax mShooter = new CANSparkMax(MotorID.SHOOTER, MotorType.kBrushless);

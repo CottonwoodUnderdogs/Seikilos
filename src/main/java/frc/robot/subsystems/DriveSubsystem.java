@@ -5,11 +5,14 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.hal.CANAPITypes.CANDeviceType;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
+import frc.robot.Constants.Inputs;
 import frc.robot.Constants.MotorSpeeds;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
@@ -52,7 +55,7 @@ public class DriveSubsystem extends SubsystemBase {
   CANSparkMax mBackLeft   = new CANSparkMax(Constants.MotorID.BACK_LEFT, MotorType.kBrushless);
 
   private final MecanumDrive robotDrive = new MecanumDrive(mFrontLeft, mBackLeft, mFrontRight, mBackRight);
-
+  private final AnalogGyro m_gyro = new AnalogGyro(Inputs.GYRO_CHANNEL);
   
   /**
    * Example command factory method.
@@ -80,7 +83,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void driveCartesian(double vx, double vy, double omega) {
     // TODO: try squaring inputs, possible solution instead of implementing slow mode
-    robotDrive.driveCartesian(vx * MotorSpeeds.DRIVE_SPEED, vy * MotorSpeeds.DRIVE_SPEED, omega * MotorSpeeds.DRIVE_SPEED);
+    robotDrive.driveCartesian(vx * MotorSpeeds.DRIVE_SPEED, vy * MotorSpeeds.DRIVE_SPEED, omega * MotorSpeeds.DRIVE_SPEED, m_gyro.getRotation2d());
   }
 
   @Override

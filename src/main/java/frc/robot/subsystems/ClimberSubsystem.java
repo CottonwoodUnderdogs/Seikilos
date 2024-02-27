@@ -7,12 +7,15 @@ package frc.robot.subsystems;
 import edu.wpi.first.hal.CANAPITypes.CANDeviceType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;;
 
@@ -29,6 +32,22 @@ public class ClimberSubsystem extends SubsystemBase {
     mClimberRight.setSmartCurrentLimit(38);
     mClimberRight.setSecondaryCurrentLimit(40);
     mClimberLeft.setSecondaryCurrentLimit(40);
+
+    m_leftPidController = mClimberLeft.getPIDController();
+    m_rightPidController = mClimberRight.getPIDController();
+
+    // Encoder object created to display position values
+    m_leftEncoder = mClimberLeft.getEncoder();
+    m_rightEncoder = mClimberRight.getEncoder();
+
+    // PID coefficients
+    kP = 0.05; 
+    kI = 0;
+    kD = 1; 
+    kIz = 0; 
+    kFF = 0; 
+    kMaxOutput = 1; 
+    kMinOutput = -1;
   }
 
   // motor controller setup
@@ -37,6 +56,16 @@ public class ClimberSubsystem extends SubsystemBase {
 
   DigitalInput climberLeftLimit = new DigitalInput(Constants.Inputs.LEFT_CLIMBER_CHANNEL);
   DigitalInput climberRightLimit = new DigitalInput(Constants.Inputs.RIGHT_CLIMBER_CHANNEL);
+  
+  private SparkPIDController m_leftPidController;
+  private RelativeEncoder m_leftEncoder;
+  public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
+  public double rotationsLeft = 0;
+  public double rotationsRight = 0;
+
+  private SparkPIDController m_rightPidController;
+  private RelativeEncoder m_rightEncoder;
+
   /**
    * Example command factory method.
    *
@@ -88,7 +117,16 @@ public class ClimberSubsystem extends SubsystemBase {
   }
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    if (climberLeftLimit.get()) {
+      m_leftPidController.setReference(rotationsLeft, CANSparkMax.ControlType.kPosition);
+    } else if (rotationsLeft < -587) {
+      rotationsLeft = -587;
+    }
+    if (climberRightLimit.get()) {
+      m_rightPidController.setReference(rotationsRight, CANSparkMax.ControlType.kPosition);
+    } else if (rotationsRight > 235) {
+      rotationsRight = 235;
+    }
   }
 
   @Override

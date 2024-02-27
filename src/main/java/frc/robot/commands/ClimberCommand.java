@@ -6,6 +6,9 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+
+import org.opencv.osgi.OpenCVInterface;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -37,12 +40,8 @@ public class ClimberCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    double speedLeft  = m_controller.getRawAxis(OperatorConstants.XboxMappings.LYAxis) * MotorSpeeds.CLIMBER_LEFT_SPEED;
-    // negative speedRight so that down on the analog stick is down on the arms.
-    double speedRight = -m_controller.getRawAxis(OperatorConstants.XboxMappings.RYAxis) * MotorSpeeds.CLIMBER_RIGHT_SPEED;
-    m_subsystem.climbLeft(speedLeft);
-    m_subsystem.climbRight(speedRight);
+    m_subsystem.rotationsLeft += m_controller.getRawAxis(OperatorConstants.XboxMappings.LYAxis) * 2.083; // left climber has higher gear ratio, so multiply power by 2 to make actual speeds equal
+    m_subsystem.rotationsRight += -m_controller.getRawAxis(OperatorConstants.XboxMappings.RYAxis);
   }
 
   // Called once the command ends or is interrupted.
