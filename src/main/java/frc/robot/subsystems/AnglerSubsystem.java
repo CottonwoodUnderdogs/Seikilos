@@ -48,7 +48,7 @@ public class AnglerSubsystem extends SubsystemBase {
   private SparkPIDController m_pidController;
   private RelativeEncoder m_encoder;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
-  public double rotations = 0;
+  public static double rotations = 0;  // 14 is perfect for close up shooting
 
 
   /**
@@ -74,6 +74,7 @@ public class AnglerSubsystem extends SubsystemBase {
     } else if (rotations < -26) {
       rotations = -26;
     }
+    SmartDashboard.putNumber("Rotations", rotations);
   } 
 
   @Override

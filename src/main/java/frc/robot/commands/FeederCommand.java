@@ -7,6 +7,7 @@ package frc.robot.commands;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -40,6 +41,7 @@ public class FeederCommand extends Command {
   @Override
   public void initialize() {
     timeToFinish = false;
+    SmartDashboard.putBoolean("loaded", false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -47,7 +49,9 @@ public class FeederCommand extends Command {
   public void execute() {
     if (m_feedToShooter || !m_subsystem.isNoteLoaded()) {
       m_subsystem.feed(MotorSpeeds.FEEDER_SPEED);
+      SmartDashboard.putBoolean("loaded", false);
     } else {
+      SmartDashboard.putBoolean("loaded", true);
       timeToFinish = true;
     }
   }

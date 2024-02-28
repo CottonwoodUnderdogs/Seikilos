@@ -6,10 +6,6 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.ShooterSubsystem;
 
-import javax.sound.midi.Sequencer;
-
-import org.ejml.equation.Sequence;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;

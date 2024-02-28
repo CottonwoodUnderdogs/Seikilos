@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
 
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -48,6 +49,20 @@ public class ClimberSubsystem extends SubsystemBase {
     kFF = 0; 
     kMaxOutput = 1; 
     kMinOutput = -1;
+
+    m_leftPidController.setP(kP);
+    m_leftPidController.setI(kI);
+    m_leftPidController.setD(kD);
+    m_leftPidController.setIZone(kIz);
+    m_leftPidController.setFF(kFF);
+    m_leftPidController.setOutputRange(kMinOutput, kMaxOutput);
+
+    m_rightPidController.setP(kP);
+    m_rightPidController.setI(kI);
+    m_rightPidController.setD(kD);
+    m_rightPidController.setIZone(kIz);
+    m_rightPidController.setFF(kFF);
+    m_rightPidController.setOutputRange(kMinOutput, kMaxOutput);
   }
 
   // motor controller setup
@@ -60,8 +75,8 @@ public class ClimberSubsystem extends SubsystemBase {
   private SparkPIDController m_leftPidController;
   private RelativeEncoder m_leftEncoder;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
-  public double rotationsLeft = 0;
-  public double rotationsRight = 0;
+  public static double rotationsLeft = 0;
+  public static double rotationsRight = 0;
 
   private SparkPIDController m_rightPidController;
   private RelativeEncoder m_rightEncoder;
@@ -115,19 +130,18 @@ public class ClimberSubsystem extends SubsystemBase {
     }
     
   }
+  public void setClimberLeftRotations(double rotations) {
+    rotationsLeft -= rotations;
+    m_leftPidController.setReference(rotationsLeft, CANSparkMax.ControlType.kPosition);
+  }
+  public void setClimberRightRotations(double rotations) {
+    rotationsRight += rotations;
+    m_rightPidController.setReference(rotationsRight, CANSparkMax.ControlType.kPosition);
+  }
   @Override
   public void periodic() {
-    if (climberLeftLimit.get()) {
-      m_leftPidController.setReference(rotationsLeft, CANSparkMax.ControlType.kPosition);
-    } else if (rotationsLeft < -587) {
-      rotationsLeft = -587;
-    }
-    if (climberRightLimit.get()) {
-      m_rightPidController.setReference(rotationsRight, CANSparkMax.ControlType.kPosition);
-    } else if (rotationsRight > 235) {
-      rotationsRight = 235;
-    }
-  }
+    
+  } 
 
   @Override
   public void simulationPeriodic() {

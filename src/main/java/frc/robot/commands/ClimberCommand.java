@@ -7,7 +7,6 @@ package frc.robot.commands;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
-import org.opencv.osgi.OpenCVInterface;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -40,8 +39,22 @@ public class ClimberCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.rotationsLeft += m_controller.getRawAxis(OperatorConstants.XboxMappings.LYAxis) * 2.083; // left climber has higher gear ratio, so multiply power by 2 to make actual speeds equal
-    m_subsystem.rotationsRight += -m_controller.getRawAxis(OperatorConstants.XboxMappings.RYAxis);
+    if (m_controller.getRawAxis(OperatorConstants.XboxMappings.LYAxis) > 0.5) {
+      m_subsystem.setClimberLeftRotations(-2.1);
+    } else if (m_controller.getRawAxis(OperatorConstants.XboxMappings.LYAxis) < -0.5) {
+      m_subsystem.setClimberLeftRotations(2.1);
+    } else {
+      m_subsystem.setClimberLeftRotations(0);
+    }
+    m_subsystem.setClimberRightRotations(1);
+    if (m_controller.getRawAxis(OperatorConstants.XboxMappings.RYAxis) > 0.5) {
+      m_subsystem.setClimberRightRotations(-1);
+    } else if (m_controller.getRawAxis(OperatorConstants.XboxMappings.RYAxis) < -0.5) {
+      m_subsystem.setClimberRightRotations(1);
+    } else {
+      m_subsystem.setClimberRightRotations(0);
+    }
+    
   }
 
   // Called once the command ends or is interrupted.

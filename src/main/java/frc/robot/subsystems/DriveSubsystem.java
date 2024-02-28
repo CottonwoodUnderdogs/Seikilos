@@ -55,7 +55,7 @@ public class DriveSubsystem extends SubsystemBase {
   CANSparkMax mBackLeft   = new CANSparkMax(Constants.MotorID.BACK_LEFT, MotorType.kBrushless);
 
   private final MecanumDrive robotDrive = new MecanumDrive(mFrontLeft, mBackLeft, mFrontRight, mBackRight);
-  private final AnalogGyro m_gyro = new AnalogGyro(Inputs.GYRO_CHANNEL);
+  // private final AnalogGyro m_gyro = new AnalogGyro(Inputs.GYRO_CHANNEL);
   
   /**
    * Example command factory method.
@@ -83,7 +83,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void driveCartesian(double vx, double vy, double omega) {
     // TODO: try squaring inputs, possible solution instead of implementing slow mode
-    robotDrive.driveCartesian(vx * MotorSpeeds.DRIVE_SPEED, vy * MotorSpeeds.DRIVE_SPEED, omega * MotorSpeeds.DRIVE_SPEED, m_gyro.getRotation2d());
+    robotDrive.driveCartesian(vx * MotorSpeeds.DRIVE_SPEED, vy * MotorSpeeds.DRIVE_SPEED, omega * MotorSpeeds.DRIVE_SPEED /*, m_gyro.getRotation2d() */);
   }
 
   @Override

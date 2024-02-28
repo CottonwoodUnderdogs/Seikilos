@@ -87,19 +87,21 @@ public class RobotContainer {
   private void configureBindings() {
     // Controller Buttons
     final JoystickButton shooterButton = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.A);
-    final JoystickButton angleButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.B);
+    final JoystickButton angleButton = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.Y);
     final JoystickButton collectIntakeButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.X);
-    
 
-    collectIntakeButton.whileTrue(
-      new ZeroAnglerCommand(m_AnglerSubsystem).alongWith(
-      new CollectorCommand(m_CollectorSubsystem)
-      ).alongWith(m_FeederCommand)
+    collectIntakeButton.toggleOnTrue(
+      new ParallelCommandGroup(
+        new ZeroAnglerCommand(m_AnglerSubsystem),
+        new CollectorCommand(m_CollectorSubsystem),
+        new FeederCommand(m_FeederSubsystem, false)
+      )
     );
     
     angleButton.whileTrue(
-      m_AnglerCommand
+      new AnglerCommand(m_AnglerSubsystem)
     );
+    
     
     // Start spinning up shooter, wait 3 seconds to get some speed, feed it in.
     shooterButton.onTrue(
