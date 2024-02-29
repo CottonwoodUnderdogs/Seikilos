@@ -11,19 +11,17 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.OperatorConstants.XboxMappings;
 
 /** An example command that uses an example subsystem. */
-public class DriveCommand extends Command {
+public class DriveForwardCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveSubsystem m_subsystem;
-  private final GenericHID m_controller;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DriveCommand(DriveSubsystem subsystem, GenericHID controller) {
+  public DriveForwardCommand(DriveSubsystem subsystem) {
     m_subsystem = subsystem;
-    m_controller = controller;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -31,22 +29,19 @@ public class DriveCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.setDefaultCommand(this);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double vx = -m_controller.getRawAxis(XboxMappings.LYAxis);
-    double vy = m_controller.getRawAxis(XboxMappings.LXAxis);
-    double omega = m_controller.getRawAxis(XboxMappings.RXAxis);
-
-    m_subsystem.driveCartesian(vx, vy, omega);
+    m_subsystem.driveCartesian(0.2, 0, 0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_subsystem.driveCartesian(0, 0, 0);
+  }
 
   // Returns true when the command should end.
   @Override

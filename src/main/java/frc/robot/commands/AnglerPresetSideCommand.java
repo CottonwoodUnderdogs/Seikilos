@@ -4,26 +4,32 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.DriveSubsystem;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.OperatorConstants.XboxMappings;
+import frc.robot.subsystems.AnglerSubsystem;
+import frc.robot.subsystems.CollectorSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class DriveCommand extends Command {
+public class AnglerPresetSideCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final DriveSubsystem m_subsystem;
-  private final GenericHID m_controller;
+  private final AnglerSubsystem m_subsystem;
 
   /**
-   * Creates a new ExampleCommand.
+   * Creates a new AnglerCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DriveCommand(DriveSubsystem subsystem, GenericHID controller) {
+  public AnglerPresetSideCommand(AnglerSubsystem subsystem) {
     m_subsystem = subsystem;
-    m_controller = controller;
+    
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -31,22 +37,18 @@ public class DriveCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.setDefaultCommand(this);
+    m_subsystem.rotations = -9;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double vx = -m_controller.getRawAxis(XboxMappings.LYAxis);
-    double vy = m_controller.getRawAxis(XboxMappings.LXAxis);
-    double omega = m_controller.getRawAxis(XboxMappings.RXAxis);
-
-    m_subsystem.driveCartesian(vx, vy, omega);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

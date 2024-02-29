@@ -7,7 +7,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.AnglerCommand;
+import frc.robot.commands.AnglerPresetDirectCommand;
+import frc.robot.commands.FeederCommand;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.ZeroAnglerCommand;
 import frc.robot.subsystems.AnglerSubsystem;
 /**
@@ -57,7 +64,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -79,6 +85,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     RobotContainer.m_AnglerSubsystem.rotations = 0;
+    RobotContainer.m_DriveSubsystem.zeroGyro();
   }
 
   /** This function is called periodically during operator control. */

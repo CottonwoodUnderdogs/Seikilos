@@ -5,10 +5,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.Constants.MotorSpeeds;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.CollectorSubsystem;
 
@@ -32,13 +34,14 @@ public class CollectorCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.collect(Constants.MotorSpeeds.COLLECTOR_SPEED);
+   
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    m_subsystem.collect(MotorSpeeds.COLLECTOR_SPEED);
+    SmartDashboard.putBoolean("collecting", true);
   }
   
 
@@ -46,6 +49,7 @@ public class CollectorCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     m_subsystem.collect(0);
+    SmartDashboard.putBoolean("collecting", false);
   }
 
   // Returns true when the command should end.

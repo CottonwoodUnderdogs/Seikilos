@@ -11,19 +11,19 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.OperatorConstants.XboxMappings;
 
 /** An example command that uses an example subsystem. */
-public class DriveCommand extends Command {
+public class SlowCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveSubsystem m_subsystem;
-  private final GenericHID m_controller;
+
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DriveCommand(DriveSubsystem subsystem, GenericHID controller) {
+  public SlowCommand(DriveSubsystem subsystem) {
     m_subsystem = subsystem;
-    m_controller = controller;
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -31,17 +31,13 @@ public class DriveCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.setDefaultCommand(this);
+    m_subsystem.toggleSlowMode();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double vx = -m_controller.getRawAxis(XboxMappings.LYAxis);
-    double vy = m_controller.getRawAxis(XboxMappings.LXAxis);
-    double omega = m_controller.getRawAxis(XboxMappings.RXAxis);
-
-    m_subsystem.driveCartesian(vx, vy, omega);
+    
   }
 
   // Called once the command ends or is interrupted.

@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.hal.CANAPITypes.CANDeviceType;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,6 +17,7 @@ import frc.robot.Constants.Inputs;
 import frc.robot.Constants.MotorSpeeds;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;;
@@ -55,7 +57,8 @@ public class DriveSubsystem extends SubsystemBase {
   CANSparkMax mBackLeft   = new CANSparkMax(Constants.MotorID.BACK_LEFT, MotorType.kBrushless);
 
   private final MecanumDrive robotDrive = new MecanumDrive(mFrontLeft, mBackLeft, mFrontRight, mBackRight);
-  // private final AnalogGyro m_gyro = new AnalogGyro(Inputs.GYRO_CHANNEL);
+  private final AHRS m_gyro = new AHRS(Port.kUSB);
+  private double driveSpeed = MotorSpeeds.DRIVE_SPEED;
   
   /**
    * Example command factory method.
@@ -80,10 +83,21 @@ public class DriveSubsystem extends SubsystemBase {
 //     // Query some boolean state, such as a digital sensor.
 //     return false;
 //   }
-
+  public void zeroGyro() {
+    m_gyro.reset();
+  }
   public void driveCartesian(double vx, double vy, double omega) {
-    // TODO: try squaring inputs, possible solution instead of implementing slow mode
-    robotDrive.driveCartesian(vx * MotorSpeeds.DRIVE_SPEED, vy * MotorSpeeds.DRIVE_SPEED, omega * MotorSpeeds.DRIVE_SPEED /*, m_gyro.getRotation2d() */);
+    robotDrive.driveCartesian(vx * driveSpeed, vy * driveSpeed, omega * driveSpeed);
+  }
+  public void driveFieldCartesian(double vx, double vy, double omega) {
+    robotDrive.driveCartesian(vx * driveSpeed, vy * driveSpeed, omega * driveSpeed, m_gyro.getRotation2d().times(-1));
+  }
+  public void toggleSlowMode() {
+    if (driveSpeed == MotorSpeeds.DRIVE_SPEED) {
+      driveSpeed = MotorSpeeds.DRIVE_SLOW_SPEED;
+    } else {
+      driveSpeed = MotorSpeeds.DRIVE_SPEED;
+    }
   }
 
   @Override
