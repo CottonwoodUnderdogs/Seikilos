@@ -140,6 +140,7 @@ public class RobotContainer {
       // figuring out how to run multiple motors at the same time
       // took 3 days, we are 5 days from deadline ;-;
       new ParallelCommandGroup(
+        new WaitCommand(0.5),
         new ShooterCommand(m_ShooterSubsystem).withTimeout(5), // the time outs in this sequence are just for turning off the motors after a bit.
         new SequentialCommandGroup(
           new WaitCommand(0.5),
