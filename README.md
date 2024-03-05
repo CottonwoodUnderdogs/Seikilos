@@ -1,5 +1,10 @@
 # Seikilos
 This is the robot built by the Cottonwood High School robotics team (7906) for the 2024 season. Code named after the longest lasting piece of music, Seikilos Epitaph, to fit the theme this year. Actual robot name decided as Barbie-bot. 
+
+
+Above                      | Below
+:-------------------------:|:-------------------------:
+![robot over](robot1.webp)  |  ![robot below](robot2.webp)
 ## Overview
 - Mecanum drive
 - Designed to collect and shoot notes
@@ -20,4 +25,4 @@ This is the robot built by the Cottonwood High School robotics team (7906) for t
 - Preset angles mapped to buttons, manual angle control also mapped.
 - Command-based programming
 ---------------------------------
-Basically all of the code was written by me on a time crunch. Not my proudest work, there was a lot I could have done better, but it was my first time dealing with OOP and WPIlib and I learnt a lot. 
+All of the code was written by me on a time crunch. Not my proudest work, there was a lot I could have done better, but it was my first time dealing with OOP and WPIlib and I learnt a lot. 
