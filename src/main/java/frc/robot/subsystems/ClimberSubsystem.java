@@ -43,7 +43,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     // PID coefficients
     kPRight = 0.05; 
-    kPLeft = 0.05;
+    kPLeft = 0.10;
     kI = 0;
     kD = 1; 
     kIz = 0; 
