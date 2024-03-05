@@ -40,9 +40,9 @@ public class ClimberCommand extends Command {
   @Override
   public void execute() {
     if (m_controller.getRawAxis(OperatorConstants.XboxMappings.LYAxis) > 0.5) {
-      m_subsystem.setClimberLeftRotations(-2.08);
+      m_subsystem.setClimberLeftRotations(-10.0);
     } else if (m_controller.getRawAxis(OperatorConstants.XboxMappings.LYAxis) < -0.5) {
-      m_subsystem.setClimberLeftRotations(2.08);
+      m_subsystem.setClimberLeftRotations(10.0);
     } else {
       m_subsystem.setClimberLeftRotations(0);
     }
