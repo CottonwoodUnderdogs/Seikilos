@@ -58,6 +58,7 @@ public final class Constants {
     public static final int BACK_LEFT   = 4;
 
     public static final int SHOOTER = 5;       // Shooting Motors
+    public static final int SHOOTER2 = 11;
     public static final int FEEDER  = 6;
 
     public static final int ANGLER = 7;

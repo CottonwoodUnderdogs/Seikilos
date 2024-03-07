@@ -40,13 +40,7 @@ public class AutoDirect extends SequentialCommandGroup {
     
     addCommands(new AnglerPresetDirectCommand(anglerSubsystem).withTimeout(1.5));
     addCommands(
-      new ParallelCommandGroup(
-        new ShooterCommand(shooterSubsystem).withTimeout(2),
-        new SequentialCommandGroup(
-          new WaitCommand(0.9),
-          new FeederCommand(feederSubsystem, true).withTimeout(5)
-        )
-      )
+      new ShooterSubsystem().shootSequence(feederSubsystem, shooterSubsystem)
     );
     addCommands(
       new ParallelRaceGroup(
@@ -59,13 +53,7 @@ public class AutoDirect extends SequentialCommandGroup {
     addCommands(new DriveBackwardCommand(driveSubsystem).withTimeout(3));
     addCommands(new AnglerPresetDirectCommand(anglerSubsystem).withTimeout(1.5));
     addCommands(
-      new ParallelCommandGroup(
-        new ShooterCommand(shooterSubsystem).withTimeout(2),
-        new SequentialCommandGroup(
-          new WaitCommand(0.9),
-          new FeederCommand(feederSubsystem, true).withTimeout(5)
-        )
-      )
+      new ShooterSubsystem().shootSequence(feederSubsystem, shooterSubsystem)
     );
   }
   

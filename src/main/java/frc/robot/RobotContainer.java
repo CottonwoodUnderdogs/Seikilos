@@ -16,6 +16,7 @@ import frc.robot.commands.CollectorOutCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.FeederCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.ShooterPIDCommand;
 import frc.robot.commands.SlowCommand;
 import frc.robot.commands.FieldDriveCommand;
 import frc.robot.commands.ZeroAnglerCommand;
@@ -43,6 +44,7 @@ import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -139,14 +141,7 @@ public class RobotContainer {
     shooterButton.onTrue(
       // figuring out how to run multiple motors at the same time
       // took 3 days, we are 5 days from deadline ;-;
-      new ParallelCommandGroup(
-        new WaitCommand(0.5),
-        new ShooterCommand(m_ShooterSubsystem).withTimeout(5), // the time outs in this sequence are just for turning off the motors after a bit.
-        new SequentialCommandGroup(
-          new WaitCommand(0.5),
-          new FeederCommand(m_FeederSubsystem, true).withTimeout(1)
-        )
-      )
+      m_ShooterSubsystem.shootSequence(m_FeederSubsystem, m_ShooterSubsystem)
     );
     angleButton.whileTrue(new AnglerCommand(m_AnglerSubsystem));
     angleDownButton.whileTrue(new AnglerDownCommand(m_AnglerSubsystem));

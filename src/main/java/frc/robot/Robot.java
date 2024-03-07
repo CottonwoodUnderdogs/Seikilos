@@ -84,7 +84,6 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    RobotContainer.m_AnglerSubsystem.rotations = -26;
     RobotContainer.m_DriveSubsystem.zeroGyro();
   }
 
