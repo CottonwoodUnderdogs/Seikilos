@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.*;
+import frc.robot.commands.FeedSlowCommand;
 import frc.robot.commands.FeederCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.ShooterPIDCommand;
@@ -43,17 +44,23 @@ public class ShooterSubsystem extends SubsystemBase {
     m_pidController2 = mShooter2.getPIDController();
 
     // Encoder object created to display position values
+    m_encoder = mShooter.getEncoder();
     m_encoder2 = mShooter2.getEncoder();
 
      // PID coefficients
-     kP = 5e-4; 
+    //  kP = 5e-4; 
+    //  kI = 0;
+    //  kD = 1; 
+    //  kIz = 0; 
+    //  kFF = 0.000015; 
+     kP = 0.005; 
      kI = 0;
-     kD = 1; 
+     kD = 0.0001; 
      kIz = 0; 
-     kFF = 0.000015; 
+     kFF = 0.00022; 
      kMaxOutput = 1; 
      kMinOutput = -1;
-     maxRPM = 5700;
+     maxRPM = 5600;
  
      // set PID coefficients
      m_pidController.setP(kP);
@@ -81,7 +88,6 @@ public class ShooterSubsystem extends SubsystemBase {
   private SparkPIDController m_pidController2;
   private RelativeEncoder m_encoder2;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
-  double setPoint = 0.8*maxRPM;
   /**
    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
    *
@@ -99,27 +105,45 @@ public class ShooterSubsystem extends SubsystemBase {
     m_pidController2.setReference(PIDSpeed, CANSparkMax.ControlType.kVelocity);
 
   }
-  public void shoot(double speed) {
-    mShooter.set(speed);
-    mShooter2.set(speed);
+  public void shoot() {
+    mShooter.set(MotorSpeeds.SHOOTER_SPEED);
+    mShooter2.set(-MotorSpeeds.SHOOTER_SPEED);
   }
   public Command shootSequence(FeederSubsystem m_FeederSubsystem, ShooterSubsystem m_ShooterSubsystem) {
     return new SequentialCommandGroup(
+      
+      // new ParallelCommandGroup(
+      //   new ShooterCommand(m_ShooterSubsystem).withTimeout(5),
+      //   new SequentialCommandGroup(
+      //     new WaitCommand(4),
+      //     new FeederCommand(m_FeederSubsystem, true).withTimeout(1)
+      //   )
+      // )
+      // new ShooterPIDCommand(m_ShooterSubsystem).withTimeout(0.2),
+      // new ParallelCommandGroup(
+      //   new ShooterCommand(m_ShooterSubsystem).withTimeout(0.7),
+        
+      //   new SequentialCommandGroup(
+         
+
+      //     new FeederCommand(m_FeederSubsystem, true).withTimeout(0.4)
+      //   )
+      // )
       new ParallelCommandGroup(
-        new ShooterPIDCommand(m_ShooterSubsystem).withTimeout(0.5),
         new ShooterCommand(m_ShooterSubsystem).withTimeout(2),
         new SequentialCommandGroup(
-          new WaitCommand(0.5),
-          new FeederCommand(m_FeederSubsystem, true).withTimeout(5)
+          new WaitCommand(1),
+          new FeedSlowCommand(m_FeederSubsystem, true).withTimeout(2)
         )
       )
+      // new ShooterPIDCommand(m_ShooterSubsystem)
+
     );
   }
-
   @Override
   public void periodic() {
 
-    
+    // SmartDashboard.putNumber("RPM", m_encoder.getVelocity());
     
   }
 

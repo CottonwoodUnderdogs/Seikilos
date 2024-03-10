@@ -12,11 +12,11 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.AnglerCommand;
-import frc.robot.commands.AnglerPresetDirectCommand;
 import frc.robot.commands.FeederCommand;
 import frc.robot.commands.ShooterCommand;
-import frc.robot.commands.ZeroAnglerCommand;
+import frc.robot.commands.ZeroClimbersCommand;
 import frc.robot.subsystems.AnglerSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -35,6 +35,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    RobotContainer.m_DriveSubsystem.zeroGyro();
   }
 
   /**
@@ -63,6 +64,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    DriveSubsystem.isAuto = true;
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -84,7 +86,9 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    DriveSubsystem.isAuto = false;
     RobotContainer.m_DriveSubsystem.zeroGyro();
+    new ZeroClimbersCommand(RobotContainer.m_ClimberSubsystem);
   }
 
   /** This function is called periodically during operator control. */

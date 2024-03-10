@@ -43,7 +43,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     // PID coefficients
     kPRight = 0.05; 
-    kPLeft = 0.05;
+    kPLeft = 0.10;
     kI = 0;
     kD = 1; 
     kIz = 0; 
@@ -82,6 +82,7 @@ public class ClimberSubsystem extends SubsystemBase {
   private SparkPIDController m_rightPidController;
   private RelativeEncoder m_rightEncoder;
 
+
   /**
    * Example command factory method.
    *
@@ -105,17 +106,19 @@ public class ClimberSubsystem extends SubsystemBase {
 //     // Query some boolean state, such as a digital sensor.
 //     return false;
 //   }
-
+  public double getLeftPosition() {
+    return rotationsLeft;
+  }
+  public double getRightPosition() {
+    return rotationsRight;
+  }
+  
   public void climbLeft(double speed) {
     if (climberLeftLimit.get()) {
       mClimberLeft.set(speed);
     } else {
-      if (speed >= 0) {
-        mClimberLeft.set(0);
-      } else {
-        mClimberLeft.set(speed);
-      }
-      
+      mClimberLeft.set(0);
+      m_leftEncoder.setPosition(0);
     }
     
   }
@@ -123,33 +126,30 @@ public class ClimberSubsystem extends SubsystemBase {
     if (climberRightLimit.get()) {
       mClimberRight.set(speed);
     } else {
-      if (speed <= 0) {
-        mClimberRight.set(0);
-      } else {
-        mClimberRight.set(speed);
-      }
-    }
-    
+      mClimberRight.set(0);
+      m_rightEncoder.setPosition(0);
+    } 
+
   }
   public void setClimberLeftRotations(double rotations) {
     rotationsLeft -= rotations;
-    if (rotationsLeft >= -580 && rotationsLeft <= -3) {
+    if (rotationsLeft >= -580 && rotationsLeft <= 0) {
       m_leftPidController.setReference(rotationsLeft, CANSparkMax.ControlType.kPosition);
     } else if (rotationsLeft < -580) {
       rotationsLeft = -580;
-    } else if (rotationsLeft > -3) {
-      rotationsLeft = -3;
+    } else if (rotationsLeft > 0) {
+      rotationsLeft = 0;
     }
   }
   public void setClimberRightRotations(double rotations) {
     rotationsRight += rotations;
 
-    if (rotationsRight <= 230 && rotationsRight >= 3) {
+    if (rotationsRight <= 230 && rotationsRight >= 0) {
       m_rightPidController.setReference(rotationsRight, CANSparkMax.ControlType.kPosition);
     } else if (rotationsRight > 230) {
       rotationsRight = 230;
-    } else if (rotationsRight < 3) {
-      rotationsRight = 3;
+    } else if (rotationsRight < 0) {
+      rotationsRight = 0;
     }
     
   }

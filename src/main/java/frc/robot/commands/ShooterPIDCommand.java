@@ -6,8 +6,6 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.ShooterSubsystem;
 
-import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -36,12 +34,13 @@ public class ShooterPIDCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.shootPID(0.8);
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_subsystem.shootPID(MotorSpeeds.SHOOTER_SPEED);
     
   }
 

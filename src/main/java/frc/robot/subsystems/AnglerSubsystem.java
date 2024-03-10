@@ -61,8 +61,8 @@ public class AnglerSubsystem extends SubsystemBase {
 //     return false;
 //   }
 
-  public void anglePower(double speed) {
-    // dummy
+  public void setAngle(double rotations) {
+    AnglerSubsystem.rotations = rotations;
   }
   @Override
   public void periodic() {

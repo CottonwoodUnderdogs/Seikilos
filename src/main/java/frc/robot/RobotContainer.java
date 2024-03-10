@@ -4,22 +4,22 @@
 
 package frc.robot;
 
+import frc.robot.Constants.MotorSpeeds;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.SetPoints;
 import frc.robot.commands.AnglerCommand;
 import frc.robot.commands.AnglerDownCommand;
-import frc.robot.commands.AnglerPresetDirectCommand;
-import frc.robot.commands.AnglerPresetSideCommand;
 import frc.robot.commands.AutoDirect;
+import frc.robot.commands.AutoSide;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.CollectorCommand;
 import frc.robot.commands.CollectorOutCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.FeederCommand;
 import frc.robot.commands.ShooterCommand;
-import frc.robot.commands.ShooterPIDCommand;
-import frc.robot.commands.SlowCommand;
+import frc.robot.commands.ZeroClimbersCommand;
 import frc.robot.commands.FieldDriveCommand;
-import frc.robot.commands.ZeroAnglerCommand;
+import frc.robot.commands.SetAnglerCommand;
 import frc.robot.subsystems.AnglerSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CollectorSubsystem;
@@ -63,7 +63,7 @@ public class RobotContainer {
   public static DriveSubsystem m_DriveSubsystem = new DriveSubsystem();
   public static ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   public static FeederSubsystem m_FeederSubsystem = new FeederSubsystem();
-  private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
+  public static ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
   public static AnglerSubsystem m_AnglerSubsystem = new AnglerSubsystem();
   public static CollectorSubsystem m_CollectorSubsystem = new CollectorSubsystem();
 
@@ -81,6 +81,8 @@ public class RobotContainer {
   private final CollectorCommand m_CollectorCommand = new CollectorCommand(m_CollectorSubsystem);
 
   private final Command m_AutoDirect = new AutoDirect(m_DriveSubsystem, m_FeederSubsystem, m_ShooterSubsystem, m_AnglerSubsystem, m_CollectorSubsystem);
+  private final Command m_ZeroClimbers = new ZeroClimbersCommand(m_ClimberSubsystem);
+  private final Command m_AutoSide = new AutoSide(m_DriveSubsystem, m_FeederSubsystem, m_ShooterSubsystem, m_AnglerSubsystem);
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   
     
@@ -92,6 +94,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
     m_chooser.setDefaultOption("direct shoot", m_AutoDirect);
+    m_chooser.addOption("zero climbers", m_ZeroClimbers);
     SmartDashboard.putData(m_chooser);
 
     m_DriveSubsystem.setDefaultCommand(m_FieldDriveCommand);
@@ -113,14 +116,13 @@ public class RobotContainer {
     // Controller 1
     final JoystickButton collectIntakeButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.R);
     final JoystickButton collectOuttakeButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.L);
-    final JoystickButton slowModeButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.A);
     final JoystickButton fieldOrientedButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.B);
     final JoystickButton roboOrientedButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.Y);
 
     
     collectIntakeButton.toggleOnTrue(
       new ParallelRaceGroup(
-        new ZeroAnglerCommand(m_AnglerSubsystem),
+        new SetAnglerCommand(m_AnglerSubsystem, 0),
         new CollectorCommand(m_CollectorSubsystem),
         new FeederCommand(m_FeederSubsystem, false)
       )
@@ -128,7 +130,6 @@ public class RobotContainer {
     collectOuttakeButton.whileTrue(new CollectorOutCommand(m_CollectorSubsystem));
     fieldOrientedButton.onTrue(new FieldDriveCommand(m_DriveSubsystem, m_driverController));
     roboOrientedButton.onTrue(new DriveCommand(m_DriveSubsystem, m_driverController));
-    slowModeButton.onTrue(new SlowCommand(m_DriveSubsystem));
     
     // Controller 2
     final JoystickButton shooterButton = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.X);
@@ -137,7 +138,7 @@ public class RobotContainer {
     final JoystickButton anglePresetDirect = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.B);
     final JoystickButton anglePresetSide = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.A);
     
-    // Start spinning up shooter, wait 3 seconds to get some speed, feed it in.
+    // Start spinning up shooter, wait set amount of time to get some speed, feed it in.
     shooterButton.onTrue(
       // figuring out how to run multiple motors at the same time
       // took 3 days, we are 5 days from deadline ;-;
@@ -145,8 +146,8 @@ public class RobotContainer {
     );
     angleButton.whileTrue(new AnglerCommand(m_AnglerSubsystem));
     angleDownButton.whileTrue(new AnglerDownCommand(m_AnglerSubsystem));
-    anglePresetDirect.onTrue(new AnglerPresetDirectCommand(m_AnglerSubsystem));
-    anglePresetSide.onTrue(new AnglerPresetSideCommand(m_AnglerSubsystem));
+    anglePresetDirect.onTrue(new SetAnglerCommand(m_AnglerSubsystem, SetPoints.ANGLER_DIRECT));
+    anglePresetSide.onTrue(new SetAnglerCommand(m_AnglerSubsystem, SetPoints.ANGLER_SMALL_DISTANCE));
   
   }
 

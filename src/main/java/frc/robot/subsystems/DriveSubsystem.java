@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -59,6 +60,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final MecanumDrive robotDrive = new MecanumDrive(mFrontLeft, mBackLeft, mFrontRight, mBackRight);
   private final AHRS m_gyro = new AHRS(Port.kUSB);
   private double driveSpeed = MotorSpeeds.DRIVE_SPEED;
+  public static boolean isAuto;
   
   /**
    * Example command factory method.
@@ -92,17 +94,15 @@ public class DriveSubsystem extends SubsystemBase {
   public void driveFieldCartesian(double vx, double vy, double omega) {
     robotDrive.driveCartesian(vx * driveSpeed, vy * driveSpeed, omega * driveSpeed, m_gyro.getRotation2d().times(-1));
   }
-  public void toggleSlowMode() {
-    if (driveSpeed == MotorSpeeds.DRIVE_SPEED) {
-      driveSpeed = MotorSpeeds.DRIVE_SLOW_SPEED;
-    } else {
-      driveSpeed = MotorSpeeds.DRIVE_SPEED;
-    }
+  public boolean getIsAuto() {
+    return isAuto;
   }
+
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("angle", m_gyro.getYaw());
   }
 
   @Override

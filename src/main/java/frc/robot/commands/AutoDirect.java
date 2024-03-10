@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants.SetPoints;
 import frc.robot.subsystems.AnglerSubsystem;
 import frc.robot.subsystems.CollectorSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -38,23 +39,26 @@ public class AutoDirect extends SequentialCommandGroup {
       //   ) 
       // ),
     
-    addCommands(new AnglerPresetDirectCommand(anglerSubsystem).withTimeout(1.5));
+    // addCommands(new AnglerPresetDirectCommand(anglerSubsystem).withTimeout(1));
+    addCommands(new SetAnglerCommand(anglerSubsystem, SetPoints.ANGLER_DIRECT));
     addCommands(
-      new ShooterSubsystem().shootSequence(feederSubsystem, shooterSubsystem)
+      shooterSubsystem.shootSequence(feederSubsystem, shooterSubsystem)
     );
     addCommands(
       new ParallelRaceGroup(
-        new DriveForwardCommand(driveSubsystem).until(() -> SmartDashboard.getBoolean("loaded", false)),
-        new CollectorCommand(collectorSubsystem)
+        new SetAnglerCommand(anglerSubsystem, 0),
+        new CollectorCommand(collectorSubsystem),
+        new FeederCommand(feederSubsystem, false),
+        new DriveForwardCommand(driveSubsystem).until(() -> SmartDashboard.getBoolean("loaded", false)).withTimeout(4)
       )
     );
     
-    
-    addCommands(new DriveBackwardCommand(driveSubsystem).withTimeout(3));
-    addCommands(new AnglerPresetDirectCommand(anglerSubsystem).withTimeout(1.5));
+    addCommands(new SetAnglerCommand(anglerSubsystem, SetPoints.ANGLER_DIRECT));
+    addCommands(new DriveBackwardCommand(driveSubsystem).withTimeout(4));
     addCommands(
-      new ShooterSubsystem().shootSequence(feederSubsystem, shooterSubsystem)
+      shooterSubsystem.shootSequence(feederSubsystem, shooterSubsystem)
     );
+
   }
   
 }

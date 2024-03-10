@@ -70,13 +70,16 @@ public final class Constants {
   }
   
   public static class MotorSpeeds {
-    public static final double FEEDER_SPEED = 0.9;
-    public static final double SHOOTER_SPEED = 1.0;
+    // Tele-op speeds
+    public static final double FEEDER_SPEED = 0.8;
+    public static final double SHOOTER_SPEED = 0.2;
     public static final double COLLECTOR_SPEED = 0.6;
     public static final double DRIVE_SPEED = 0.9;
     public static final double DRIVE_SLOW_SPEED = 0.3;
-    public static final double CLIMBER_LEFT_SPEED = 0.5;
-    public static final double CLIMBER_RIGHT_SPEED = 0.5;
+    public static final double CLIMBER_LEFT_SPEED = 0.8;
+    public static final double CLIMBER_RIGHT_SPEED = 0.8;
+    // Auto speeds
+    public static final double DRIVE_AUTO_SPEED = 0.6;
   }
 
   public static class Inputs {
@@ -85,5 +88,12 @@ public final class Constants {
     // Limit Switches
     public static final int LEFT_CLIMBER_CHANNEL = 2;
     public static final int RIGHT_CLIMBER_CHANNEL = 3;
+  }
+
+  public static class SetPoints {
+    public static final double ANGLER_DIRECT = -14;
+    public static final double ANGLER_SMALL_DISTANCE = -9;
+
+
   }
 }

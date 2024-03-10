@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.OperatorConstants.XboxMappings;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.AnglerSubsystem;
 import frc.robot.subsystems.CollectorSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -41,7 +42,9 @@ public class FieldDriveCommand extends Command {
   @Override
   public void initialize() {
     m_subsystem.setDefaultCommand(this);
+    RobotContainer.m_DriveSubsystem.zeroGyro();
   }
+  
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
