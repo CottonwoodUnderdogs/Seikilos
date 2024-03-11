@@ -57,10 +57,9 @@ public final class Constants {
     public static final int BACK_RIGHT  = 2;
     public static final int BACK_LEFT   = 4;
 
-    public static final int SHOOTER = 5;       // Shooting Motors
-    public static final int SHOOTER2 = 11;
+    public static final int SHOOTER =  5;       // Shooting Motors
     public static final int FEEDER  = 6;
-
+    
     public static final int ANGLER = 7;
     
     public static final int CLIMBER_LEFT  = 10; // Climbing Motors
@@ -72,19 +71,19 @@ public final class Constants {
   public static class MotorSpeeds {
     // Tele-op speeds
     public static final double FEEDER_SPEED = 0.8;
-    public static final double SHOOTER_SPEED = 0.2;
+    public static final double SHOOTER_SPEED = 1.0;
     public static final double COLLECTOR_SPEED = 0.6;
     public static final double DRIVE_SPEED = 0.9;
     public static final double DRIVE_SLOW_SPEED = 0.3;
-    public static final double CLIMBER_LEFT_SPEED = 0.8;
-    public static final double CLIMBER_RIGHT_SPEED = 0.8;
+    public static final double CLIMBER_LEFT_SPEED = 0.3;
+    public static final double CLIMBER_RIGHT_SPEED = 0.3;
     // Auto speeds
-    public static final double DRIVE_AUTO_SPEED = 0.6;
+    public static final double DRIVE_AUTO_SPEED = 0.3;
   }
 
   public static class Inputs {
     // Beam break sensors
-    public static final int NOTE_LOADED_CHANNEL = 0;
+    public static final int NOTE_LOADED_CHANNEL = 1;
     // Limit Switches
     public static final int LEFT_CLIMBER_CHANNEL = 2;
     public static final int RIGHT_CLIMBER_CHANNEL = 3;

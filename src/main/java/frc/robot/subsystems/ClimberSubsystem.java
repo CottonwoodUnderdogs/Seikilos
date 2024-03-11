@@ -112,7 +112,11 @@ public class ClimberSubsystem extends SubsystemBase {
   public double getRightPosition() {
     return rotationsRight;
   }
-  
+
+  /**
+   * Dangerous, if limit switches are not working or the climbers go too high, there is nothing to stop this from breaking the climbers, use setClimberRotations
+   *
+   */
   public void climbLeft(double speed) {
     if (climberLeftLimit.get()) {
       mClimberLeft.set(speed);
@@ -122,6 +126,10 @@ public class ClimberSubsystem extends SubsystemBase {
     }
     
   }
+  /**
+   * Dangerous, if limit switches are not working or the climbers go too high, there is nothing to stop this from breaking the climbers, use setClimberRotations
+   *
+   */
   public void climbRight(double speed) {
     if (climberRightLimit.get()) {
       mClimberRight.set(speed);
@@ -131,6 +139,10 @@ public class ClimberSubsystem extends SubsystemBase {
     } 
 
   }
+  /**
+   * uses PID to control height of climbers, with PID limits.
+   * @param rotations
+   */
   public void setClimberLeftRotations(double rotations) {
     rotationsLeft -= rotations;
     if (rotationsLeft >= -580 && rotationsLeft <= 0) {
@@ -141,6 +153,10 @@ public class ClimberSubsystem extends SubsystemBase {
       rotationsLeft = 0;
     }
   }
+  /**
+   * uses PID to control height of climbers, with PID limits.
+   * @param rotations
+   */
   public void setClimberRightRotations(double rotations) {
     rotationsRight += rotations;
 

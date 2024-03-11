@@ -7,6 +7,7 @@ package frc.robot.commands;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.MotorSpeeds;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.OperatorConstants.XboxMappings;
 
@@ -34,7 +35,7 @@ public class DriveRightCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.driveCartesian(0, 0.7, 0);
+    m_subsystem.driveFieldCartesian(0, MotorSpeeds.DRIVE_AUTO_SPEED, 0);
   }
 
   // Called once the command ends or is interrupted.

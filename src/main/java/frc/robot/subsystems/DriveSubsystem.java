@@ -26,6 +26,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;;
 public class DriveSubsystem extends SubsystemBase {
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+
     mFrontRight.restoreFactoryDefaults();
     mFrontLeft.restoreFactoryDefaults();
     mBackRight.restoreFactoryDefaults();
@@ -91,11 +92,15 @@ public class DriveSubsystem extends SubsystemBase {
   public void driveCartesian(double vx, double vy, double omega) {
     robotDrive.driveCartesian(vx * driveSpeed, vy * driveSpeed, omega * driveSpeed);
   }
+  // uses gyro to make field centric driving
   public void driveFieldCartesian(double vx, double vy, double omega) {
     robotDrive.driveCartesian(vx * driveSpeed, vy * driveSpeed, omega * driveSpeed, m_gyro.getRotation2d().times(-1));
   }
-  public boolean getIsAuto() {
-    return isAuto;
+  public void straighten(double desiredAngle) {
+    // keep in mind that this stops all other driving, so it must be called when not driving.
+    double omega = desiredAngle - m_gyro.getAngle();
+    this.driveCartesian(0, 0, omega*0.02); // multiplying error by constant to correct it until it hits its target 0.
+    
   }
 
 
@@ -103,6 +108,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("angle", m_gyro.getYaw());
+    
   }
 
   @Override

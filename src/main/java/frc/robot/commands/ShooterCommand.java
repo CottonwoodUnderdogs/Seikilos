@@ -50,7 +50,7 @@ public class ShooterCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.shoot();
+    m_subsystem.turnOffShooter();
     // m_subsystem.shootPID(0);
   }
 

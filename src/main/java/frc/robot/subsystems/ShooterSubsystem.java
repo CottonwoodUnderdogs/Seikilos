@@ -35,19 +35,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     m_pidController = mShooter.getPIDController();
 
-    mShooter2.restoreFactoryDefaults();
-    mShooter2.setIdleMode(IdleMode.kCoast);
-
-    mShooter2.setSmartCurrentLimit(40);
-    mShooter2.setSecondaryCurrentLimit(50);
-
-    m_pidController2 = mShooter2.getPIDController();
-
     // Encoder object created to display position values
     m_encoder = mShooter.getEncoder();
-    m_encoder2 = mShooter2.getEncoder();
 
-     // PID coefficients
+    // PID coefficients
     //  kP = 5e-4; 
     //  kI = 0;
     //  kD = 1; 
@@ -70,23 +61,13 @@ public class ShooterSubsystem extends SubsystemBase {
      m_pidController.setFF(kFF);
      m_pidController.setOutputRange(kMinOutput, kMaxOutput);
 
-     m_pidController2.setP(kP);
-     m_pidController2.setI(kI);
-     m_pidController2.setD(kD);
-     m_pidController2.setIZone(kIz);
-     m_pidController2.setFF(kFF);
-     m_pidController2.setOutputRange(kMinOutput, kMaxOutput);
-
      
 
   }
 
   CANSparkMax mShooter = new CANSparkMax(MotorID.SHOOTER, MotorType.kBrushless);
-  CANSparkMax mShooter2 = new CANSparkMax(MotorID.SHOOTER2, MotorType.kBrushless);
   private SparkPIDController m_pidController;
   private RelativeEncoder m_encoder;
-  private SparkPIDController m_pidController2;
-  private RelativeEncoder m_encoder2;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
   /**
    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
@@ -97,21 +78,23 @@ public class ShooterSubsystem extends SubsystemBase {
 //     // Query some boolean state, such as a digital sensor.
 //     return false;
 //   }
-
+  // PID used to see if it would make any significant difference, didn't really.
   public void shootPID(double speed) {
     
     double PIDSpeed = speed*maxRPM;
     m_pidController.setReference(PIDSpeed, CANSparkMax.ControlType.kVelocity);
-    m_pidController2.setReference(PIDSpeed, CANSparkMax.ControlType.kVelocity);
 
   }
   public void shoot() {
     mShooter.set(MotorSpeeds.SHOOTER_SPEED);
-    mShooter2.set(-MotorSpeeds.SHOOTER_SPEED);
   }
+  public void turnOffShooter() {
+    mShooter.set(0);
+  }
+  // I don't know why I put this as part of the shooter subsystem, it isn't really making use of it lol, TODO: Move this to a dif file.
   public Command shootSequence(FeederSubsystem m_FeederSubsystem, ShooterSubsystem m_ShooterSubsystem) {
     return new SequentialCommandGroup(
-      
+      // the relics of wasted time and effort
       // new ParallelCommandGroup(
       //   new ShooterCommand(m_ShooterSubsystem).withTimeout(5),
       //   new SequentialCommandGroup(
@@ -133,7 +116,7 @@ public class ShooterSubsystem extends SubsystemBase {
         new ShooterCommand(m_ShooterSubsystem).withTimeout(2),
         new SequentialCommandGroup(
           new WaitCommand(1),
-          new FeedSlowCommand(m_FeederSubsystem, true).withTimeout(2)
+          new FeedSlowCommand(m_FeederSubsystem, true).withTimeout(1)
         )
       )
       // new ShooterPIDCommand(m_ShooterSubsystem)

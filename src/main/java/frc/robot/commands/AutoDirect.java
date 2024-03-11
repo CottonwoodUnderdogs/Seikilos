@@ -38,27 +38,33 @@ public class AutoDirect extends SequentialCommandGroup {
       //     new FeederCommand(feederSubsystem, true).withTimeout(1)
       //   ) 
       // ),
-    
+    this.setName("direct");
     // addCommands(new AnglerPresetDirectCommand(anglerSubsystem).withTimeout(1));
+    // pre loaded note
     addCommands(new SetAnglerCommand(anglerSubsystem, SetPoints.ANGLER_DIRECT));
     addCommands(
       shooterSubsystem.shootSequence(feederSubsystem, shooterSubsystem)
     );
+    addCommands(new DriveStraightenCommand(driveSubsystem, 0).withTimeout(1));
+    addCommands(new SetAnglerCommand(anglerSubsystem, 0));
+    // second note
     addCommands(
-      new ParallelRaceGroup(
-        new SetAnglerCommand(anglerSubsystem, 0),
-        new CollectorCommand(collectorSubsystem),
+      new ParallelCommandGroup(
+        new CollectorCommand(collectorSubsystem).withTimeout(3),
         new FeederCommand(feederSubsystem, false),
-        new DriveForwardCommand(driveSubsystem).until(() -> SmartDashboard.getBoolean("loaded", false)).withTimeout(4)
+        new DriveForwardCommand(driveSubsystem).withTimeout(1.5)
       )
     );
-    
+    addCommands(new DriveStraightenCommand(driveSubsystem, 0).withTimeout(0.7));
     addCommands(new SetAnglerCommand(anglerSubsystem, SetPoints.ANGLER_DIRECT));
-    addCommands(new DriveBackwardCommand(driveSubsystem).withTimeout(4));
+    addCommands(new DriveBackwardCommand(driveSubsystem).withTimeout(1.5));
     addCommands(
       shooterSubsystem.shootSequence(feederSubsystem, shooterSubsystem)
     );
-
+    // third note
+    addCommands(new DriveStraightenCommand(driveSubsystem, 53));
   }
-  
+  public boolean shouldStraighten() {
+    return true;
+  }
 }

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.AnglerCommand;
+import frc.robot.commands.DriveStraightenCommand;
 import frc.robot.commands.FeederCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.ZeroClimbersCommand;
@@ -75,7 +76,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    
+  }
 
   @Override
   public void teleopInit() {
@@ -88,7 +91,6 @@ public class Robot extends TimedRobot {
     }
     DriveSubsystem.isAuto = false;
     RobotContainer.m_DriveSubsystem.zeroGyro();
-    new ZeroClimbersCommand(RobotContainer.m_ClimberSubsystem);
   }
 
   /** This function is called periodically during operator control. */

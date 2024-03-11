@@ -80,6 +80,7 @@ public class RobotContainer {
 
   private final CollectorCommand m_CollectorCommand = new CollectorCommand(m_CollectorSubsystem);
 
+  // Auto options and chooser defined
   private final Command m_AutoDirect = new AutoDirect(m_DriveSubsystem, m_FeederSubsystem, m_ShooterSubsystem, m_AnglerSubsystem, m_CollectorSubsystem);
   private final Command m_ZeroClimbers = new ZeroClimbersCommand(m_ClimberSubsystem);
   private final Command m_AutoSide = new AutoSide(m_DriveSubsystem, m_FeederSubsystem, m_ShooterSubsystem, m_AnglerSubsystem);
@@ -95,6 +96,7 @@ public class RobotContainer {
     configureBindings();
     m_chooser.setDefaultOption("direct shoot", m_AutoDirect);
     m_chooser.addOption("zero climbers", m_ZeroClimbers);
+    m_chooser.addOption("side shot", m_AutoSide);
     SmartDashboard.putData(m_chooser);
 
     m_DriveSubsystem.setDefaultCommand(m_FieldDriveCommand);
@@ -112,8 +114,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Controller Buttons
-    // Controller 1
+    /* Controller Buttons */ 
+    /* Controller 1 */
     final JoystickButton collectIntakeButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.R);
     final JoystickButton collectOuttakeButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.L);
     final JoystickButton fieldOrientedButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.B);
@@ -121,17 +123,18 @@ public class RobotContainer {
 
     
     collectIntakeButton.toggleOnTrue(
+      new SetAnglerCommand(m_AnglerSubsystem, 0).andThen(
       new ParallelRaceGroup(
-        new SetAnglerCommand(m_AnglerSubsystem, 0),
+        
         new CollectorCommand(m_CollectorSubsystem),
-        new FeederCommand(m_FeederSubsystem, false)
+        new FeederCommand(m_FeederSubsystem, false))
       )
     );
     collectOuttakeButton.whileTrue(new CollectorOutCommand(m_CollectorSubsystem));
     fieldOrientedButton.onTrue(new FieldDriveCommand(m_DriveSubsystem, m_driverController));
     roboOrientedButton.onTrue(new DriveCommand(m_DriveSubsystem, m_driverController));
     
-    // Controller 2
+    /* Controller 2 */ 
     final JoystickButton shooterButton = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.X);
     final JoystickButton angleButton = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.R);
     final JoystickButton angleDownButton = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.L);

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.Constants.Inputs;
 import frc.robot.Constants.MotorSpeeds;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -38,14 +39,14 @@ public class ZeroClimbersCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.climbLeft(-MotorSpeeds.CLIMBER_LEFT_SPEED);
-    m_subsystem.climbRight(-MotorSpeeds.CLIMBER_RIGHT_SPEED);
+    
   } 
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    m_subsystem.climbLeft(MotorSpeeds.CLIMBER_LEFT_SPEED);
+    m_subsystem.climbRight(-MotorSpeeds.CLIMBER_RIGHT_SPEED);
   }
 
   // Called once the command ends or is interrupted.

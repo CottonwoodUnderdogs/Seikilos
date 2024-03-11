@@ -30,12 +30,11 @@ public class FeederSubsystem extends SubsystemBase {
   DigitalInput noteLoadedInput = new DigitalInput(Inputs.NOTE_LOADED_CHANNEL);
 
   /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
+   * 
+   * @return true if note is loaded.
    */
   public boolean isNoteLoaded() {
-    // Query some boolean state, such as a digital sensor.
+    
     return !noteLoadedInput.get();
   }
   public void feed(double speed) {

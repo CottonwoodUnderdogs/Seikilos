@@ -50,17 +50,6 @@ public class AnglerSubsystem extends SubsystemBase {
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
   public static double rotations = 0;  // 14 is perfect for close up shooting
 
-
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-//   public boolean exampleCondition() {
-//     // Query some boolean state, such as a digital sensor.
-//     return false;
-//   }
-
   public void setAngle(double rotations) {
     AnglerSubsystem.rotations = rotations;
   }

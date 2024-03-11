@@ -12,7 +12,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.OperatorConstants.XboxMappings;
 
 /** An example command that uses an example subsystem. */
-public class DriveBackwardCommand extends Command {
+public class DriveLeftCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveSubsystem m_subsystem;
 
@@ -21,7 +21,7 @@ public class DriveBackwardCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DriveBackwardCommand(DriveSubsystem subsystem) {
+  public DriveLeftCommand(DriveSubsystem subsystem) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -35,7 +35,7 @@ public class DriveBackwardCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.driveCartesian(-MotorSpeeds.DRIVE_AUTO_SPEED, 0, 0);
+    m_subsystem.driveFieldCartesian(0, -MotorSpeeds.DRIVE_AUTO_SPEED, 0);
   }
 
   // Called once the command ends or is interrupted.
