@@ -99,7 +99,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void straighten(double desiredAngle) {
     // keep in mind that this stops all other driving, so it must be called when not driving.
     double omega = desiredAngle - m_gyro.getAngle();
-    this.driveCartesian(0, 0, omega*0.02); // multiplying error by constant to correct it until it hits its target 0.
+    this.driveCartesian(0, 0, omega*0.01); // multiplying error by constant to correct it until it hits its target 0.
     
   }
 

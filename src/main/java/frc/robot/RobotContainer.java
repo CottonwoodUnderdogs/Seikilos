@@ -123,7 +123,7 @@ public class RobotContainer {
 
     
     collectIntakeButton.toggleOnTrue(
-      new SetAnglerCommand(m_AnglerSubsystem, 0).andThen(
+      new SetAnglerCommand(m_AnglerSubsystem, SetPoints.ANGLER_COLLECTING).andThen(
       new ParallelRaceGroup(
         
         new CollectorCommand(m_CollectorSubsystem),
@@ -135,11 +135,11 @@ public class RobotContainer {
     roboOrientedButton.onTrue(new DriveCommand(m_DriveSubsystem, m_driverController));
     
     /* Controller 2 */ 
-    final JoystickButton shooterButton = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.X);
+    final JoystickButton shooterButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.X);
     final JoystickButton angleButton = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.R);
     final JoystickButton angleDownButton = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.L);
     final JoystickButton anglePresetDirect = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.B);
-    final JoystickButton anglePresetSide = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.A);
+    final JoystickButton anglePresetSide = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.A);
     
     // Start spinning up shooter, wait set amount of time to get some speed, feed it in.
     shooterButton.onTrue(
