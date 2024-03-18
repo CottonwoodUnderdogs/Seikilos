@@ -145,10 +145,10 @@ public class ClimberSubsystem extends SubsystemBase {
    */
   public void setClimberLeftRotations(double rotations) {
     rotationsLeft -= rotations;
-    if (rotationsLeft >= -580 && rotationsLeft <= 0) {
+    if (rotationsLeft >= -230 && rotationsLeft <= 0) {
       m_leftPidController.setReference(rotationsLeft, CANSparkMax.ControlType.kPosition);
-    } else if (rotationsLeft < -580) {
-      rotationsLeft = -580;
+    } else if (rotationsLeft < -230) {
+      rotationsLeft = -230;
     } else if (rotationsLeft > 0) {
       rotationsLeft = 0;
     }

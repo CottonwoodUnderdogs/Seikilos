@@ -19,7 +19,7 @@ Above                      | Below
 - Uses CAN Bus
 - Mecanum wheels
 - NavX2 Micro gyroscope through Robo-rio USB-A port
-- Left climber at 100:1 gear ratio, right climber at 48:1
+- Both climbers at 48:1 gear ratio
 - PID on angling mechanism and climbers, "pseudo-PID" setup on shooter.
 - Mapped around two Xbox One controllers, one for driving and collecting, one for climbing, angling, and shooting.
 - Preset angles mapped to buttons, manual angle control also mapped.

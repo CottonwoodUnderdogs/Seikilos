@@ -11,6 +11,7 @@ import frc.robot.commands.AnglerCommand;
 import frc.robot.commands.AnglerDownCommand;
 import frc.robot.commands.AutoDirect;
 import frc.robot.commands.AutoSide;
+import frc.robot.commands.AutoStraight;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.CollectorCommand;
 import frc.robot.commands.CollectorOutCommand;
@@ -83,7 +84,8 @@ public class RobotContainer {
   // Auto options and chooser defined
   private final Command m_AutoDirect = new AutoDirect(m_DriveSubsystem, m_FeederSubsystem, m_ShooterSubsystem, m_AnglerSubsystem, m_CollectorSubsystem);
   private final Command m_ZeroClimbers = new ZeroClimbersCommand(m_ClimberSubsystem);
-  private final Command m_AutoSide = new AutoSide(m_DriveSubsystem, m_FeederSubsystem, m_ShooterSubsystem, m_AnglerSubsystem);
+  private final Command m_AutoSide = new AutoSide(m_DriveSubsystem, m_FeederSubsystem, m_ShooterSubsystem, m_AnglerSubsystem, m_CollectorSubsystem);
+  private final Command m_AutoStraight = new AutoStraight(m_DriveSubsystem, m_FeederSubsystem, m_AnglerSubsystem, m_CollectorSubsystem);
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   
     
@@ -97,7 +99,8 @@ public class RobotContainer {
     m_chooser.setDefaultOption("direct shoot", m_AutoDirect);
     m_chooser.addOption("zero climbers", m_ZeroClimbers);
     m_chooser.addOption("side shot", m_AutoSide);
-    SmartDashboard.putData(m_chooser);
+    m_chooser.addOption("0 note straight drive", m_AutoStraight);
+    SmartDashboard.putData("Auto Select", m_chooser);
 
     m_DriveSubsystem.setDefaultCommand(m_FieldDriveCommand);
     m_ClimberSubsystem.setDefaultCommand(m_ClimberCommand);
@@ -135,11 +138,11 @@ public class RobotContainer {
     roboOrientedButton.onTrue(new DriveCommand(m_DriveSubsystem, m_driverController));
     
     /* Controller 2 */ 
-    final JoystickButton shooterButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.X);
+    final JoystickButton shooterButton = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.X);
     final JoystickButton angleButton = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.R);
     final JoystickButton angleDownButton = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.L);
     final JoystickButton anglePresetDirect = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.B);
-    final JoystickButton anglePresetSide = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.A);
+    final JoystickButton anglePresetSide = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.A);
     
     // Start spinning up shooter, wait set amount of time to get some speed, feed it in.
     shooterButton.onTrue(

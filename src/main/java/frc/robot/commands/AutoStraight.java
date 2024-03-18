@@ -24,21 +24,16 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-public class AutoSide extends SequentialCommandGroup {
+public class AutoStraight extends SequentialCommandGroup {
   /** Example static factory for an autonomous command. */
-  public AutoSide(DriveSubsystem driveSubsystem, FeederSubsystem feederSubsystem, ShooterSubsystem shooterSubsystem, AnglerSubsystem anglerSubsystem, CollectorSubsystem collectorSubsystem) {
-    addCommands(new SetAnglerCommand(anglerSubsystem, SetPoints.ANGLER_DIRECT));
-    addCommands(shooterSubsystem.shootSequence(feederSubsystem, shooterSubsystem));
-    addCommands(new SetAnglerCommand(anglerSubsystem, 0));
-    // if (DriverStation.getAlliance().get() == Alliance.Blue) {
-    //   addCommands(new DriveStraightenCommand(driveSubsystem, 90).withTimeout(1.5));
-    // } else {
-    //   addCommands(new DriveStraightenCommand(driveSubsystem, -30).withTimeout(1.5));
-    // } // this doesn't work ;-;
-    addCommands(new DriveForwardCommand(driveSubsystem).withTimeout(1.6));
-    addCommands(new DriveStraightenCommand(driveSubsystem, 0).withTimeout(2));
+  public AutoStraight(DriveSubsystem driveSubsystem, FeederSubsystem feederSubsystem, AnglerSubsystem anglerSubsystem, CollectorSubsystem collectorSubsystem) {
+    addCommands(new WaitCommand(13.5));
     addCommands(
-        new DriveForwardCommand(driveSubsystem).deadlineWith(new CollectorCommand(collectorSubsystem).deadlineWith(new FeederCommand(feederSubsystem, false)).withTimeout(2.5))
-    );
+      new ParallelCommandGroup(
+        new SetAnglerCommand(anglerSubsystem, SetPoints.ANGLER_COLLECTING),
+        new FeederCommand(feederSubsystem, false).deadlineWith(new CollectorCommand(collectorSubsystem)),
+        new DriveForwardCommand(driveSubsystem).withTimeout(0.7)
+      )
+    );  
   }
 }

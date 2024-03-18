@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
@@ -45,74 +45,76 @@ public class AutoDirect extends SequentialCommandGroup {
       new ParallelCommandGroup(
         new SetAnglerCommand(anglerSubsystem, SetPoints.ANGLER_DIRECT),
         shooterSubsystem.shootSequence(feederSubsystem, shooterSubsystem),
-        new DriveStraightenCommand(driveSubsystem, 0).withTimeout(0.3)
+        new DriveStraightenCommand(driveSubsystem, 0).withTimeout(0.6)
       )
     );
     // second note
     addCommands(
       new ParallelCommandGroup(
         new SetAnglerCommand(anglerSubsystem, SetPoints.ANGLER_COLLECTING),
-        new CollectorCommand(collectorSubsystem).withTimeout(2.5),
-        new FeederCommand(feederSubsystem, false),
-        new DriveForwardCommand(driveSubsystem).withTimeout(1.2)
+        new FeederCommand(feederSubsystem, false).deadlineWith(new CollectorCommand(collectorSubsystem)),
+        new DriveForwardCommand(driveSubsystem).withTimeout(0.6)
       )
     );
     addCommands(
       new ParallelCommandGroup(
-        new DriveStraightenCommand(driveSubsystem, 0).withTimeout(0.2),
-        new SetAnglerCommand(anglerSubsystem, SetPoints.ANGLER_SMALL_DISTANCE)
+        new DriveStraightenCommand(driveSubsystem,0).withTimeout(0.4),
+        new SetAnglerCommand(anglerSubsystem, SetPoints.ANGLER_DIRECT)
       )
     );
     addCommands(
       new ParallelCommandGroup(
-        new DriveBackwardCommand(driveSubsystem).withTimeout(0.45),
-        shooterSubsystem.shootSequence(feederSubsystem, shooterSubsystem)
+        new DriveBackwardCommand(driveSubsystem).withTimeout(0.6),
+        shooterSubsystem.shootSequence(feederSubsystem, shooterSubsystem),
+        new WaitCommand(1.5)
       )
     );
     // third note
-    addCommands(new DriveStraightenCommand(driveSubsystem, 75).withTimeout(0.7));
+    addCommands(new DriveStraightenCommand(driveSubsystem, 42.5).withTimeout(1));
     addCommands(
       new ParallelCommandGroup(
-        new SetAnglerCommand(anglerSubsystem, SetPoints.ANGLER_COLLECTING),
-        new CollectorCommand(collectorSubsystem).withTimeout(2.5),
-        new FeederCommand(feederSubsystem, false),
-        new DriveForwardCommand(driveSubsystem).withTimeout(1.2)
+        new SetAnglerCommand(anglerSubsystem, SetPoints.ANGLER_DIRECT),
+        new FeederCommand(feederSubsystem, false).deadlineWith(new CollectorCommand(collectorSubsystem)),
+        new DriveForwardCommand(driveSubsystem).withTimeout(0.83)
       )
     );
     
     addCommands(
+        new DriveBackwardCommand(driveSubsystem).withTimeout(0.55)
+        
+    );
+    addCommands(new DriveStraightenCommand(driveSubsystem, 0).withTimeout(1));
+    addCommands(
       new ParallelCommandGroup(
-        new DriveBackwardCommand(driveSubsystem).withTimeout(1.0),
-        new SetAnglerCommand(anglerSubsystem, SetPoints.ANGLER_SMALL_DISTANCE)
+        new SetAnglerCommand(anglerSubsystem, SetPoints.ANGLER_DIRECT),
+        new DriveBackwardCommand(driveSubsystem).withTimeout(0.35),
+        shooterSubsystem.shootSequence(feederSubsystem, shooterSubsystem)
+      )
+
+    );
+    // fourth note
+    addCommands(new DriveStraightenCommand(driveSubsystem, -50).withTimeout(1.5));
+    addCommands(
+      new ParallelCommandGroup(
+        new SetAnglerCommand(anglerSubsystem, SetPoints.ANGLER_COLLECTING),
+        new FeederCommand(feederSubsystem, false).deadlineWith(new CollectorCommand(collectorSubsystem)),
+        new DriveForwardCommand(driveSubsystem).withTimeout(0.7)
       )
     );
     addCommands(
       new ParallelCommandGroup(
-        new DriveStraightenCommand(driveSubsystem, 0).withTimeout(0.7),
+        new DriveBackwardCommand(driveSubsystem).withTimeout(0.5),
+        new SetAnglerCommand(anglerSubsystem, SetPoints.ANGLER_SMALL_DISTANCE)
+      )
+    );
+    
+    addCommands(new DriveStraightenCommand(driveSubsystem, 0).withTimeout(1));
+    addCommands(
+      new ParallelCommandGroup(
+        new DriveBackwardCommand(driveSubsystem).withTimeout(0.2),
         shooterSubsystem.shootSequence(feederSubsystem, shooterSubsystem)
       )
     );
-    // fourth note
-    addCommands(new DriveStraightenCommand(driveSubsystem, -75).withTimeout(0.7));
-    addCommands(
-      new ParallelCommandGroup(
-        new SetAnglerCommand(anglerSubsystem, SetPoints.ANGLER_COLLECTING),
-        new CollectorCommand(collectorSubsystem).withTimeout(2.5),
-        new FeederCommand(feederSubsystem, false),
-        new DriveForwardCommand(driveSubsystem).withTimeout(1.2)
-      )
-    );
-    addCommands(
-      new ParallelCommandGroup(
-        new DriveBackwardCommand(driveSubsystem).withTimeout(1.2),
-        new SetAnglerCommand(anglerSubsystem, SetPoints.ANGLER_SMALL_DISTANCE)
-      )
-    );
-    addCommands(new DriveStraightenCommand(driveSubsystem, 0).withTimeout(0.7));
-    addCommands(new DriveForwardCommand(driveSubsystem).withTimeout(0.1));
-    
-    
-    addCommands(shooterSubsystem.shootSequence(feederSubsystem, shooterSubsystem));
   }
   public boolean shouldStraighten() {
     return true;

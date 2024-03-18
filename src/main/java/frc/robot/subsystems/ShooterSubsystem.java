@@ -113,9 +113,9 @@ public class ShooterSubsystem extends SubsystemBase {
       //   )
       // )
       new ParallelCommandGroup(
-        new ShooterCommand(m_ShooterSubsystem).withTimeout(2),
+        new ShooterCommand(m_ShooterSubsystem).withTimeout(1.5),
         new SequentialCommandGroup(
-          new WaitCommand(1),
+          new WaitCommand(0.75),
           new FeedSlowCommand(m_FeederSubsystem, true).withTimeout(1)
         )
       )

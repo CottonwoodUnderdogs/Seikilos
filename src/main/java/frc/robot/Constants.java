@@ -70,15 +70,15 @@ public final class Constants {
   
   public static class MotorSpeeds {
     // Tele-op speeds
-    public static final double FEEDER_SPEED = 0.85;
+    public static final double FEEDER_SPEED = 0.95;
     public static final double SHOOTER_SPEED = 1.0;
-    public static final double COLLECTOR_SPEED = 0.3;
+    public static final double COLLECTOR_SPEED = 0.63;
     public static final double DRIVE_SPEED = 0.9;
     public static final double DRIVE_SLOW_SPEED = 0.3;
     public static final double CLIMBER_LEFT_SPEED = 0.3;
     public static final double CLIMBER_RIGHT_SPEED = 0.3;
     // Auto speeds
-    public static final double DRIVE_AUTO_SPEED = 0.4;
+    public static final double DRIVE_AUTO_SPEED = 0.63;
   }
 
   public static class Inputs {
