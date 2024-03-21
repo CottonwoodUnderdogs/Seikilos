@@ -32,7 +32,7 @@ public class AutoStraight extends SequentialCommandGroup {
       new ParallelCommandGroup(
         new SetAnglerCommand(anglerSubsystem, SetPoints.ANGLER_COLLECTING),
         new FeederCommand(feederSubsystem, false).deadlineWith(new CollectorCommand(collectorSubsystem)),
-        new DriveForwardCommand(driveSubsystem).withTimeout(0.7)
+        new DriveForwardCommand(driveSubsystem).withTimeout(1.5)
       )
     );  
   }
