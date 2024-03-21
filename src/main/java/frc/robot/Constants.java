@@ -91,7 +91,7 @@ public final class Constants {
 
   public static class SetPoints {
     public static final double ANGLER_DIRECT = -18;
-    public static final double ANGLER_SMALL_DISTANCE = -10.75;
+    public static final double ANGLER_SMALL_DISTANCE = -4.3;
     public static final double ANGLER_COLLECTING = -8;
 
 

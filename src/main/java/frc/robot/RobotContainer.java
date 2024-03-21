@@ -16,9 +16,11 @@ import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.CollectorCommand;
 import frc.robot.commands.CollectorOutCommand;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.DriveStraightenCommand;
 import frc.robot.commands.FeederCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.ZeroClimbersCommand;
+import frc.robot.commands.ZeroGyroCommand;
 import frc.robot.commands.FieldDriveCommand;
 import frc.robot.commands.SetAnglerCommand;
 import frc.robot.subsystems.AnglerSubsystem;
@@ -87,6 +89,8 @@ public class RobotContainer {
   private final Command m_AutoSide = new AutoSide(m_DriveSubsystem, m_FeederSubsystem, m_ShooterSubsystem, m_AnglerSubsystem, m_CollectorSubsystem);
   private final Command m_AutoStraight = new AutoStraight(m_DriveSubsystem, m_FeederSubsystem, m_AnglerSubsystem, m_CollectorSubsystem);
   SendableChooser<Command> m_chooser = new SendableChooser<>();
+
+  private final Command m_ZeroGyro = new ZeroGyroCommand(m_DriveSubsystem);
   
     
 
@@ -101,7 +105,7 @@ public class RobotContainer {
     m_chooser.addOption("side shot", m_AutoSide);
     m_chooser.addOption("0 note straight drive", m_AutoStraight);
     SmartDashboard.putData("Auto Select", m_chooser);
-
+    SmartDashboard.putData(new SequentialCommandGroup(m_ZeroGyro.withTimeout(1)));
     m_DriveSubsystem.setDefaultCommand(m_FieldDriveCommand);
     m_ClimberSubsystem.setDefaultCommand(m_ClimberCommand);
 
@@ -123,7 +127,7 @@ public class RobotContainer {
     final JoystickButton collectOuttakeButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.L);
     final JoystickButton fieldOrientedButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.B);
     final JoystickButton roboOrientedButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.Y);
-
+    final JoystickButton stageShotAngleButton = new JoystickButton(m_driverController, OperatorConstants.XboxMappings.A);
     
     collectIntakeButton.toggleOnTrue(
       new SetAnglerCommand(m_AnglerSubsystem, SetPoints.ANGLER_COLLECTING).andThen(
@@ -136,7 +140,8 @@ public class RobotContainer {
     collectOuttakeButton.whileTrue(new CollectorOutCommand(m_CollectorSubsystem));
     fieldOrientedButton.onTrue(new FieldDriveCommand(m_DriveSubsystem, m_driverController));
     roboOrientedButton.onTrue(new DriveCommand(m_DriveSubsystem, m_driverController));
-    
+    stageShotAngleButton.onTrue(new DriveStraightenCommand(m_DriveSubsystem, 28).withTimeout(0.3));
+
     /* Controller 2 */ 
     final JoystickButton shooterButton = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.X);
     final JoystickButton angleButton = new JoystickButton(m_secondaryController, OperatorConstants.XboxMappings.R);
