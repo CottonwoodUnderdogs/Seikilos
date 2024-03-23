@@ -35,8 +35,6 @@ public class AutoSide extends SequentialCommandGroup {
     // } else {
     //   addCommands(new DriveStraightenCommand(driveSubsystem, -30).withTimeout(1.5));
     // } // this doesn't work ;-;
-    addCommands(new DriveForwardCommand(driveSubsystem).withTimeout(1.6));
-    addCommands(new DriveStraightenCommand(driveSubsystem, 0).withTimeout(2));
-    addCommands(new DriveForwardCommand(driveSubsystem).withTimeout(2.5));
+    addCommands(new DriveForwardCommand(driveSubsystem).withTimeout(2.3));
   }
 }
